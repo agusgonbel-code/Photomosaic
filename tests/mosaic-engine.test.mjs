@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
 await import('../mosaic-engine.js');
-const { isSupportedImageFile, calculateTileDecodeSide, colorDistance, calculateGrid, pickTile } = globalThis.PhotoMosaicEngine;
+const { isSupportedImageFile, calculateTileDecodeSide, colorDistance, calculateGrid, pickTile, usageStats } = globalThis.PhotoMosaicEngine;
 
 assert.equal(isSupportedImageFile({ name: 'foto.HEIC', type: '', size: 1024 }, 2048), true);
 assert.equal(isSupportedImageFile({ name: 'foto', type: 'image/heif', size: 1024 }, 2048), true);
 assert.equal(isSupportedImageFile({ name: 'vector.svg', type: 'image/svg+xml', size: 1024 }, 2048), false);
 assert.equal(isSupportedImageFile({ name: 'foto.jpg', type: 'image/jpeg', size: 4096 }, 2048), false);
+assert.equal(isSupportedImageFile({ name: 'vacía.jpg', type: 'image/jpeg', size: 0 }, 2048), false);
 assert.equal(calculateTileDecodeSide(3200, 100), 96);
 assert.equal(calculateTileDecodeSide(2200, 44), 150);
 assert.equal(calculateTileDecodeSide(3200, 15), 384);
@@ -31,6 +32,13 @@ const tiles = [
 assert.equal(pickTile([100, 100, 100], tiles, [], true).index, 0);
 assert.equal(pickTile([100, 100, 100], tiles, [0], true).index, 1);
 assert.equal(pickTile([100, 100, 100], tiles, [0], false).index, 0);
+const usage = new Map([[0, 10], [1, 0]]);
+assert.equal(pickTile([100, 100, 100], tiles, [], false, usage, 18).index, 1);
+assert.equal(pickTile([100, 100, 100], tiles, [], false, usage, 0).index, 0);
+assert.throws(() => pickTile([100, 100, 100], tiles, [], false, usage, -1));
 assert.throws(() => pickTile([0, 0, 0], []));
+assert.deepEqual(usageStats(new Map([[0, 4], [1, 2], [2, 0]]), 6), {
+  unique: 2, total: 6, mostUsed: 4
+});
 
 console.log('Mosaic engine tests passed');
