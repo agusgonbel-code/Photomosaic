@@ -28,7 +28,11 @@ jobs:
       - name: Validate JavaScript
         run: |
           node --check app.js
+          node --check mosaic-engine.js
           node --check service-worker.js
+
+      - name: Test mosaic engine
+        run: node --test tests/mosaic-engine.test.mjs
 
       - name: Validate manifest
         run: node -e "JSON.parse(require('fs').readFileSync('manifest.webmanifest','utf8'))"
@@ -39,6 +43,7 @@ jobs:
           test -s index.html
           test -s styles.css
           test -s app.js
+          test -s mosaic-engine.js
           test -s service-worker.js
           test -s manifest.webmanifest
           test -s icons/icon-192.png
@@ -47,3 +52,4 @@ jobs:
           grep -q 'id="tiles"' index.html
           grep -q 'multiple' index.html
           grep -q 'navigator.canShare' app.js
+          grep -q 'mosaic-engine.js' index.html
