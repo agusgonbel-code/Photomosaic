@@ -53,3 +53,4 @@ jobs:
           grep -q 'multiple' index.html
           grep -q 'navigator.canShare' app.js
           grep -q 'mosaic-engine.js' index.html
+          grep -q "'./mosaic-engine.js'" service-worker.js
