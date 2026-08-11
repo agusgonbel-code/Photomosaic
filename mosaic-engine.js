@@ -1,6 +1,28 @@
 (() => {
   'use strict';
 
+  const IMAGE_TYPES = new Set([
+    'image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'
+  ]);
+  const IMAGE_EXTENSION = /\.(?:jpe?g|png|webp|heic|heif)$/i;
+
+  function isSupportedImageFile(file, maxBytes) {
+    if (!file || !Number.isFinite(file.size) || file.size < 0 ||
+        !Number.isFinite(maxBytes) || maxBytes <= 0 || file.size > maxBytes) {
+      return false;
+    }
+    const type = String(file.type ?? '').split(';')[0].trim().toLowerCase();
+    return IMAGE_TYPES.has(type) || IMAGE_EXTENSION.test(String(file.name ?? ''));
+  }
+
+  function calculateTileDecodeSide(outputMaxSide, columns, oversample = 3) {
+    if (![outputMaxSide, columns, oversample].every(Number.isFinite) ||
+        outputMaxSide <= 0 || columns < 1 || oversample <= 0) {
+      throw new Error('Resolución de tesela no válida');
+    }
+    return Math.max(96, Math.min(384, Math.ceil(outputMaxSide / columns * oversample)));
+  }
+
   function colorDistance(a, b) {
     const mean = (a[0] + b[0]) / 2;
     const red = a[0] - b[0];
@@ -51,5 +73,7 @@
     return best;
   }
 
-  globalThis.PhotoMosaicEngine = { colorDistance, calculateGrid, pickTile };
+  globalThis.PhotoMosaicEngine = {
+    isSupportedImageFile, calculateTileDecodeSide, colorDistance, calculateGrid, pickTile
+  };
 })();
