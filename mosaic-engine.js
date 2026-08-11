@@ -7,7 +7,7 @@
   const IMAGE_EXTENSION = /\.(?:jpe?g|png|webp|heic|heif)$/i;
 
   function isSupportedImageFile(file, maxBytes) {
-    if (!file || !Number.isFinite(file.size) || file.size < 0 ||
+    if (!file || !Number.isFinite(file.size) || file.size <= 0 ||
         !Number.isFinite(maxBytes) || maxBytes <= 0 || file.size > maxBytes) {
       return false;
     }
@@ -56,7 +56,10 @@
     };
   }
 
-  function pickTile(color, tiles, recent = [], avoidRepeats = true) {
+  function pickTile(color, tiles, recent = [], avoidRepeats = true, usage = null, usagePenalty = 0) {
+    if (!Number.isFinite(usagePenalty) || usagePenalty < 0) {
+      throw new Error('Penalización de variedad no válida');
+    }
     if (!tiles.length) throw new Error('No hay teselas válidas');
     let best;
     let bestDistance = Infinity;
@@ -65,6 +68,8 @@
       if (avoidRepeats && recent.includes(tile.index)) {
         distance = distance * 1.38 + 24;
       }
+      const used = usage instanceof Map ? Number(usage.get(tile.index) || 0) : 0;
+      if (Number.isFinite(used) && used > 0) distance += used * usagePenalty;
       if (distance < bestDistance) {
         best = tile;
         bestDistance = distance;
@@ -73,7 +78,19 @@
     return best;
   }
 
+  function usageStats(usage, totalTiles) {
+    if (!(usage instanceof Map) || !Number.isFinite(totalTiles) || totalTiles < 0) {
+      throw new Error('Uso de teselas no válido');
+    }
+    const counts = [...usage.values()].filter(value => Number.isFinite(value) && value > 0);
+    return {
+      unique: counts.length,
+      total: Math.round(totalTiles),
+      mostUsed: counts.length ? Math.max(...counts) : 0
+    };
+  }
+
   globalThis.PhotoMosaicEngine = {
-    isSupportedImageFile, calculateTileDecodeSide, colorDistance, calculateGrid, pickTile
+    isSupportedImageFile, calculateTileDecodeSide, colorDistance, calculateGrid, pickTile, usageStats
   };
 })();
