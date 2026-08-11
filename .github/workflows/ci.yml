@@ -34,6 +34,24 @@ jobs:
       - name: Test mosaic engine
         run: node --test tests/mosaic-engine.test.mjs
 
+      - name: Build public site
+        run: node scripts/build-site.mjs
+
+      - name: Verify minimal publication artifact
+        shell: bash
+        run: |
+          test -s dist/index.html
+          test -s dist/app.js
+          test -s dist/mosaic-engine.js
+          test -s dist/service-worker.js
+          test -s dist/icons/icon-192.png
+          test -s dist/icons/icon-512.png
+          test -f dist/.nojekyll
+          test ! -e dist/tests
+          test ! -e dist/.github
+          cmp --silent index.html dist/index.html
+          cmp --silent app.js dist/app.js
+
       - name: Validate manifest
         run: node -e "JSON.parse(require('fs').readFileSync('manifest.webmanifest','utf8'))"
 
