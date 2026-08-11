@@ -1,6 +1,15 @@
 import assert from 'node:assert/strict';
 await import('../mosaic-engine.js');
-const { colorDistance, calculateGrid, pickTile } = globalThis.PhotoMosaicEngine;
+const { isSupportedImageFile, calculateTileDecodeSide, colorDistance, calculateGrid, pickTile } = globalThis.PhotoMosaicEngine;
+
+assert.equal(isSupportedImageFile({ name: 'foto.HEIC', type: '', size: 1024 }, 2048), true);
+assert.equal(isSupportedImageFile({ name: 'foto', type: 'image/heif', size: 1024 }, 2048), true);
+assert.equal(isSupportedImageFile({ name: 'vector.svg', type: 'image/svg+xml', size: 1024 }, 2048), false);
+assert.equal(isSupportedImageFile({ name: 'foto.jpg', type: 'image/jpeg', size: 4096 }, 2048), false);
+assert.equal(calculateTileDecodeSide(3200, 100), 96);
+assert.equal(calculateTileDecodeSide(2200, 44), 150);
+assert.equal(calculateTileDecodeSide(3200, 15), 384);
+assert.throws(() => calculateTileDecodeSide(0, 45));
 
 assert.equal(colorDistance([20, 40, 60], [20, 40, 60]), 0);
 assert.equal(colorDistance([0, 0, 0], [255, 255, 255]) > 700, true);
