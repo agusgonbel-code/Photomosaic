@@ -15,7 +15,7 @@ Aplicación PWA para crear mosaicos de una foto principal usando 10 o más fotog
 Dentro de la carpeta ejecuta `python -m http.server 8080` y abre `http://localhost:8080`.
 
 ## Publicar gratis
-Sube la carpeta completa a Netlify Drop o GitHub Pages.
+Al fusionar el PR en `main`, GitHub Actions construye un paquete mínimo y lo despliega automáticamente mediante GitHub Pages. El artefacto público solo incluye la aplicación, el manifiesto, el service worker y los iconos; no publica pruebas ni configuración interna.
 
 ## Instalar en iPhone
 Abre la URL publicada en Safari > Compartir > Añadir a pantalla de inicio.
