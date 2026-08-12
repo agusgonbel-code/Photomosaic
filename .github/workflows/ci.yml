@@ -1,0 +1,74 @@
+name: PhotoMosaic CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: photomosaic-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate JavaScript
+        run: |
+          node --check app.js
+          node --check mosaic-engine.js
+          node --check service-worker.js
+
+      - name: Test mosaic engine
+        run: node --test tests/mosaic-engine.test.mjs
+
+      - name: Build public site
+        run: node scripts/build-site.mjs
+
+      - name: Verify minimal publication artifact
+        shell: bash
+        run: |
+          test -s dist/index.html
+          test -s dist/app.js
+          test -s dist/mosaic-engine.js
+          test -s dist/service-worker.js
+          test -s dist/icons/icon-192.png
+          test -s dist/icons/icon-512.png
+          test -f dist/.nojekyll
+          test ! -e dist/tests
+          test ! -e dist/.github
+          cmp --silent index.html dist/index.html
+          cmp --silent app.js dist/app.js
+
+      - name: Validate manifest
+        run: node -e "JSON.parse(require('fs').readFileSync('manifest.webmanifest','utf8'))"
+
+      - name: Verify application shell
+        shell: bash
+        run: |
+          test -s index.html
+          test -s styles.css
+          test -s app.js
+          test -s mosaic-engine.js
+          test -s service-worker.js
+          test -s manifest.webmanifest
+          test -s icons/icon-192.png
+          test -s icons/icon-512.png
+          grep -q 'id="target"' index.html
+          grep -q 'id="tiles"' index.html
+          grep -q 'multiple' index.html
+          grep -q 'navigator.canShare' app.js
+          grep -q 'mosaic-engine.js' index.html
+          grep -q "'./mosaic-engine.js'" service-worker.js
