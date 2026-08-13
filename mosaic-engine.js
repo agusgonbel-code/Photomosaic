@@ -15,12 +15,30 @@
     return IMAGE_TYPES.has(type) || IMAGE_EXTENSION.test(String(file.name ?? ''));
   }
 
-  function calculateTileDecodeSide(outputMaxSide, columns, oversample = 3) {
-    if (![outputMaxSide, columns, oversample].every(Number.isFinite) ||
-        outputMaxSide <= 0 || columns < 1 || oversample <= 0) {
+  const DEFAULT_TILE_MEMORY_BUDGET = 36 * 1024 * 1024;
+
+  function estimateTileMemoryBytes(side, tileCount) {
+    if (![side, tileCount].every(Number.isFinite) || side <= 0 || tileCount < 1) {
+      throw new Error('Estimación de memoria no válida');
+    }
+    return Math.ceil(side) ** 2 * 4 * Math.ceil(tileCount);
+  }
+
+  function calculateTileDecodeSide(
+    outputMaxSide,
+    columns,
+    oversample = 3,
+    tileCount = 1,
+    memoryBudgetBytes = DEFAULT_TILE_MEMORY_BUDGET
+  ) {
+    if (![outputMaxSide, columns, oversample, tileCount, memoryBudgetBytes].every(Number.isFinite) ||
+        outputMaxSide <= 0 || columns < 1 || oversample <= 0 ||
+        tileCount < 1 || memoryBudgetBytes <= 0) {
       throw new Error('Resolución de tesela no válida');
     }
-    return Math.max(96, Math.min(384, Math.ceil(outputMaxSide / columns * oversample)));
+    const detailSide = Math.ceil(outputMaxSide / columns * oversample);
+    const budgetSide = Math.floor(Math.sqrt(memoryBudgetBytes / (Math.ceil(tileCount) * 4)));
+    return Math.max(64, Math.min(384, detailSide, budgetSide));
   }
 
   function colorDistance(a, b) {
@@ -91,6 +109,7 @@
   }
 
   globalThis.PhotoMosaicEngine = {
-    isSupportedImageFile, calculateTileDecodeSide, colorDistance, calculateGrid, pickTile, usageStats
+    isSupportedImageFile, estimateTileMemoryBytes, calculateTileDecodeSide,
+    colorDistance, calculateGrid, pickTile, usageStats
   };
 })();
