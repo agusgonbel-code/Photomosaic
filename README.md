@@ -9,6 +9,7 @@ Aplicación PWA para crear mosaicos de una foto principal usando 10 o más fotog
 - Memoria adaptada automáticamente al detalle y resolución elegidos.
 - Ajuste de detalle, mezcla, resolución y variedad de fotografías.
 - Tres modos de selección: color fiel, equilibrio o mayor diversidad; al terminar indica cuántas fotos diferentes se utilizaron.
+- Generación cancelable: las selecciones y ajustes quedan bloqueados durante el cálculo para evitar resultados inconsistentes, y las fotos siguen disponibles al cancelar.
 - Guardado y hoja nativa de compartir del iPhone en JPG.
 - Instalación en la pantalla de inicio del iPhone o Android.
 
