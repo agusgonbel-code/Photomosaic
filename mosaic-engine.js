@@ -108,8 +108,31 @@
     };
   }
 
+
+  const EXPORT_FORMATS = Object.freeze({
+    jpeg: Object.freeze({ mimeType: 'image/jpeg', extension: 'jpg', quality: 0.94 }),
+    png: Object.freeze({ mimeType: 'image/png', extension: 'png' })
+  });
+
+  function exportOptions(format = 'jpeg') {
+    const options = EXPORT_FORMATS[String(format).toLowerCase()];
+    if (!options) throw new Error('Formato de exportación no válido');
+    return options;
+  }
+
+  function exportFilename(format = 'jpeg', date = new Date()) {
+    const options = exportOptions(format);
+    if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+      throw new Error('Fecha de exportación no válida');
+    }
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `photomosaic-${year}-${month}-${day}.${options.extension}`;
+  }
+
   globalThis.PhotoMosaicEngine = {
     isSupportedImageFile, estimateTileMemoryBytes, calculateTileDecodeSide,
-    colorDistance, calculateGrid, pickTile, usageStats
+    colorDistance, calculateGrid, pickTile, usageStats, exportOptions, exportFilename
   };
 })();
