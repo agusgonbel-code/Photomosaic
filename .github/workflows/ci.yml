@@ -78,6 +78,8 @@ jobs:
           grep -q "hasSource=shaped||Boolean(st.target)" app.js
           grep -q "butterfly: { label: 'Mariposa'" shape-engine.js
           grep -q 'value="clover"' index.html
+          grep -q 'id="downloadCsv"' index.html
+          grep -q 'installationGuideSvg' shape-engine.js
           grep -q 'shape-trim' selection-controls.js
           grep -q "'./selection-controls.js'" service-worker.js
           grep -q 'id="exportFormat"' index.html

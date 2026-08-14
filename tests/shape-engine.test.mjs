@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 await import('../shape-engine.js');
-const { SHAPES, shapeCells, shapeLimits, nearbyCounts, layoutForCount, installationPlan, trimSelection, pickUniqueTile } = globalThis.PhotoMosaicShapes;
+const { SHAPES, shapeCells, shapeLimits, nearbyCounts, layoutForCount, installationPlan, installationGuideSvg, installationPlanCsv, trimSelection, pickUniqueTile } = globalThis.PhotoMosaicShapes;
 
 assert.deepEqual(Object.keys(SHAPES), ['heart','circle','oval','square','diamond','triangle','star','hexagon','flower','crescent','cross','lightning','cloud','butterfly','arrow','clover']);
 assert.equal(Object.keys(SHAPES).length, 16);
@@ -46,3 +46,13 @@ assert.deepEqual(wallPlan.positions.map(({ number, xCm, yCm }) => ({ number, xCm
 ]);
 assert.throws(() => installationPlan(wallLayout, { photoWidthCm: 2 }), /Medidas no válidas/);
 assert.throws(() => installationPlan({ cells: [] }), /Diseño no válido/);
+
+const visualGuide = installationGuideSvg(wallPlan, { shapeLabel: 'Corazón <familiar>' });
+assert.match(visualGuide, /Plano de colocación/);
+assert.match(visualGuide, /Corazón &lt;familiar&gt;/);
+assert.match(visualGuide, />1<\/text>/);
+assert.match(visualGuide, /22\.0 × 32\.0 cm/);
+const csvGuide = installationPlanCsv(wallPlan, ['uno.jpg', 'foto;"dos".jpg', 'tres.jpg']);
+assert.ok(csvGuide.startsWith('\uFEFF'));
+assert.match(csvGuide, /"foto;""dos""\.jpg"/);
+assert.throws(() => installationGuideSvg(null), /Plano no válido/);
