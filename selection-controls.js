@@ -3,6 +3,7 @@
   const shapeInfo=document.querySelector('#shapeInfo');
   const mode=document.querySelector('#mosaicMode');
   const shape=document.querySelector('#shape');
+  const shapeApi=window.PhotoMosaicShapes;
   if(!strip||!shapeInfo||!mode||!shape)return;
 
   const style=document.createElement('style');
@@ -12,6 +13,7 @@
     #strip .tile-remove{position:absolute;top:3px;right:3px;width:24px;height:24px;min-height:24px;padding:0;border-radius:999px;background:rgba(17,24,39,.84);color:#fff;font-size:17px;line-height:24px;display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.2);z-index:2}
     #strip .tile-remove:active{transform:scale(.94)}
     .shape-adjustment{display:block;margin-top:7px;font-weight:800;color:#1d4ed8}
+    .shape-trim{display:block;width:100%;margin-top:10px;padding:10px 12px;min-height:44px;background:#1d4ed8;color:#fff}
   `;
   document.head.append(style);
 
@@ -35,7 +37,7 @@
     shapeInfo.querySelector('.shape-adjustment')?.remove();
     if(mode.value!=='shape'||!st.tiles.length)return;
     const count=st.tiles.length;
-    const near=nearbyCounts(shape.value,count);
+    const near=shapeApi.nearbyCounts(shape.value,count);
     if(near.exact)return;
 
     const options=[];
@@ -52,6 +54,16 @@
     const extra=document.createElement('span');
     extra.className='shape-adjustment';
     extra.textContent=`Para ajustar la forma: ${options.join(' o ')}. Puedes quitar fotos una a una tocando la × de cada miniatura.`;
+    if(near.lower&&count>near.lower){
+      const remove=count-near.lower;
+      const trim=document.createElement('button');
+      trim.type='button';
+      trim.className='shape-trim';
+      trim.dataset.count=String(near.lower);
+      trim.textContent=`Quitar ${remove} y usar ${near.lower} fotos`;
+      trim.disabled=generation.isRunning();
+      extra.append(trim);
+    }
     shapeInfo.append(extra);
   }
 
@@ -65,12 +77,20 @@
 
   strip.addEventListener('click',ev=>{
     const button=ev.target.closest('.tile-remove');
-    if(!button)return;
+    if(!button||generation.isRunning())return;
     const index=Number(button.dataset.index);
     if(!Number.isInteger(index)||index<0||index>=st.tiles.length)return;
     st.tiles.splice(index,1);
     renderTiles();
     refreshShapeHint();
+  });
+
+  shapeInfo.addEventListener('click',ev=>{
+    const button=ev.target.closest('.shape-trim');
+    if(!button||generation.isRunning())return;
+    const count=Number(button.dataset.count);
+    st.tiles=shapeApi.trimSelection(st.tiles,count);
+    renderTiles();
   });
 
   mode.addEventListener('change',()=>queueMicrotask(refreshShapeHint));
