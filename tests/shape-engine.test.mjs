@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 await import('../shape-engine.js');
-const { SHAPES, shapeCells, shapeLimits, nearbyCounts, layoutForCount, trimSelection, pickUniqueTile } = globalThis.PhotoMosaicShapes;
+const { SHAPES, shapeCells, shapeLimits, nearbyCounts, layoutForCount, installationPlan, trimSelection, pickUniqueTile } = globalThis.PhotoMosaicShapes;
 
 assert.deepEqual(Object.keys(SHAPES), ['heart','circle','oval','square','diamond','triangle','star','hexagon','flower','crescent','cross','lightning','cloud','butterfly','arrow','clover']);
 assert.equal(Object.keys(SHAPES).length, 16);
@@ -34,3 +34,15 @@ const tiles = [{ index: 0, color: [0,0,0] }, { index: 1, color: [10,10,10] }];
 assert.equal(pickUniqueTile([0,0,0], tiles, used, (a,b) => Math.abs(a[0]-b[0])).index, 1);
 assert.throws(() => pickUniqueTile([0,0,0], tiles, new Set([0,1]), () => 0), /No quedan/);
 console.log('Shape engine tests passed');
+
+const wallLayout = { cells: [{ row: 2, column: 3 }, { row: 2, column: 4 }, { row: 3, column: 4 }] };
+const wallPlan = installationPlan(wallLayout, { photoWidthCm: 10, photoHeightCm: 15, gapCm: 2 });
+assert.equal(wallPlan.widthCm, 22);
+assert.equal(wallPlan.heightCm, 32);
+assert.deepEqual(wallPlan.positions.map(({ number, xCm, yCm }) => ({ number, xCm, yCm })), [
+  { number: 1, xCm: 0, yCm: 0 },
+  { number: 2, xCm: 12, yCm: 0 },
+  { number: 3, xCm: 12, yCm: 17 }
+]);
+assert.throws(() => installationPlan(wallLayout, { photoWidthCm: 2 }), /Medidas no válidas/);
+assert.throws(() => installationPlan({ cells: [] }), /Diseño no válido/);

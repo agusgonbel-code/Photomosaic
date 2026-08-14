@@ -103,6 +103,32 @@
     return validLayouts(shape, maximum).find(item => item.count === Math.round(count)) || null;
   }
 
+  function installationPlan(layout, options = {}) {
+    if (!layout || !Array.isArray(layout.cells) || !layout.cells.length) throw new Error('Diseño no válido');
+    const width = Number(options.photoWidthCm ?? 10);
+    const height = Number(options.photoHeightCm ?? 15);
+    const gap = Number(options.gapCm ?? 2);
+    if (![width, height].every(value => Number.isFinite(value) && value >= 5 && value <= 100) ||
+        !Number.isFinite(gap) || gap < 0 || gap > 50) throw new Error('Medidas no válidas');
+    const rows = layout.cells.map(cell => cell.row), columns = layout.cells.map(cell => cell.column);
+    const minRow = Math.min(...rows), maxRow = Math.max(...rows);
+    const minColumn = Math.min(...columns), maxColumn = Math.max(...columns);
+    const rowCount = maxRow - minRow + 1, columnCount = maxColumn - minColumn + 1;
+    const positions = layout.cells.map((cell, index) => ({
+      number: index + 1,
+      row: cell.row - minRow + 1,
+      column: cell.column - minColumn + 1,
+      xCm: (cell.column - minColumn) * (width + gap),
+      yCm: (cell.row - minRow) * (height + gap)
+    }));
+    return {
+      photoWidthCm: width, photoHeightCm: height, gapCm: gap,
+      widthCm: columnCount * width + (columnCount - 1) * gap,
+      heightCm: rowCount * height + (rowCount - 1) * gap,
+      rows: rowCount, columns: columnCount, positions
+    };
+  }
+
   function trimSelection(items, count) {
     if (!Array.isArray(items)) throw new TypeError('Selección no válida');
     if (!Number.isInteger(count) || count < 0 || count > items.length) {
@@ -123,6 +149,6 @@
   }
 
   globalThis.PhotoMosaicShapes = {
-    SHAPES, shapeCells, validLayouts, shapeLimits, nearbyCounts, layoutForCount, trimSelection, pickUniqueTile
+    SHAPES, shapeCells, validLayouts, shapeLimits, nearbyCounts, layoutForCount, installationPlan, trimSelection, pickUniqueTile
   };
 })();
