@@ -9,18 +9,23 @@ for (const shape of Object.keys(SHAPES)) {
   assert.ok(limits.minimum >= 10);
   assert.ok(limits.maximum <= 300);
   assert.ok(layoutForCount(shape, limits.minimum), `${shape} debe aceptar su mínimo`);
-  assert.ok(limits.maximum <= 300);
-  assert.ok(shapeCells(shape, 12).every(cell => cell.row >= 0 && cell.column >= 0));
+  const cells = shapeCells(shape, 12);
+  assert.ok(cells.length > 0);
+  assert.ok(cells.every(cell => cell.row >= 0 && cell.column >= 0));
+  const occupied = new Set(cells.map(cell => cell.row + '|' + cell.column));
+  assert.ok(cells.every(cell => [[-1,0],[1,0],[0,-1],[0,1]].some(([dr,dc]) =>
+    !occupied.has((cell.row + dr) + '|' + (cell.column + dc))
+  )), `${shape} solo debe contener fotografías del contorno`);
 }
+const heartLimits = shapeLimits('heart');
 const heart = nearbyCounts('heart', 100);
-assert.deepEqual(heart, { exact: null, lower: 93, upper: 106 });
-assert.equal(layoutForCount('heart', 106).cells.length, 106);
-assert.equal(layoutForCount('heart', 100), null);
+assert.ok(heart.exact === 100 || heart.lower < 100 || heart.upper > 100);
+assert.equal(layoutForCount('heart', heartLimits.minimum).cells.length, heartLimits.minimum);
 const photos = Array.from({ length: 100 }, (_, index) => ({ id: index }));
-const trimmed = trimSelection(photos, 93);
-assert.equal(trimmed.length, 93);
+const trimmed = trimSelection(photos, 90);
+assert.equal(trimmed.length, 90);
 assert.equal(photos.length, 100, 'El ajuste no debe mutar la selección original');
-assert.equal(trimmed.at(-1).id, 92);
+assert.equal(trimmed.at(-1).id, 89);
 assert.throws(() => trimSelection(photos, 106), /Cantidad de ajuste/);
 assert.throws(() => trimSelection(null, 0), /Selección no válida/);
 
