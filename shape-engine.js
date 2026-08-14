@@ -52,15 +52,22 @@
   function shapeCells(shape, columns) {
     if (!SHAPES[shape]) throw new Error('Forma no válida');
     if (!Number.isInteger(columns) || columns < 3 || columns > 80) throw new Error('Tamaño de forma no válido');
-    const cells = [];
+    const filled = [];
+    const occupied = new Set();
     for (let row = 0; row < columns; row++) {
       for (let column = 0; column < columns; column++) {
         const x = ((column + 0.5) / columns * 2 - 1) * 1.15;
         const y = ((row + 0.5) / columns * 2 - 1) * 1.15;
-        if (inside(shape, x, y)) cells.push({ row, column });
+        if (inside(shape, x, y)) {
+          filled.push({ row, column });
+          occupied.add(row + '|' + column);
+        }
       }
     }
-    return cells;
+    const neighbours = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+    return filled.filter(cell => neighbours.some(([dr, dc]) =>
+      !occupied.has((cell.row + dr) + '|' + (cell.column + dc))
+    ));
   }
 
   function validLayouts(shape, maximum = 300) {
