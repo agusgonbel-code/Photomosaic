@@ -12,6 +12,7 @@ Aplicación PWA para crear mosaicos de una foto principal usando 10 o más fotog
 - Las fotografías ocupan solo el borde de la figura y dejan el interior vacío; no necesitan foto principal y cada imagen se usa una sola vez.
 - Cálculo automático del mínimo, máximo y cantidades válidas cercanas para montar el contorno físicamente.
 - Plano de montaje físico configurable: ancho y alto de cada foto, separación, medidas totales en pared y CSV numerado con fila, columna y coordenadas desde la esquina superior izquierda.
+- Plano visual vectorial numerado para imprimir o compartir, con la silueta completa, medidas de pared, tamaño de cada foto y orden de colocación; el CSV detallado sigue disponible por separado.
 - Ajuste flexible de la selección: muestra cuántas sobran o faltan, permite eliminar miniaturas individualmente o recortar con un toque hasta la cantidad válida inferior.
 - Tres modos de selección: color fiel, equilibrio o mayor diversidad; al terminar indica cuántas fotos diferentes se utilizaron.
 - Generación cancelable: las selecciones y ajustes quedan bloqueados durante el cálculo para evitar resultados inconsistentes, y las fotos siguen disponibles al cancelar.

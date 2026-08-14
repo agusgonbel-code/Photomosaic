@@ -129,6 +129,47 @@
     };
   }
 
+  const xml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;'
+  })[character]);
+
+  function installationGuideSvg(plan, options = {}) {
+    if (!plan || !Array.isArray(plan.positions) || !plan.positions.length) throw new Error('Plano no válido');
+    const shapeLabel = String(options.shapeLabel || 'Forma').trim().slice(0, 60) || 'Forma';
+    const canvasWidth = 1200, canvasHeight = 1500, left = 70, top = 270;
+    const drawingWidth = canvasWidth - left * 2, drawingHeight = 1040;
+    const scale = Math.min(drawingWidth / plan.widthCm, drawingHeight / plan.heightCm);
+    if (!Number.isFinite(scale) || scale <= 0) throw new Error('Medidas del plano no válidas');
+    const offsetX = left + (drawingWidth - plan.widthCm * scale) / 2;
+    const offsetY = top + (drawingHeight - plan.heightCm * scale) / 2;
+    const photoWidth = plan.photoWidthCm * scale, photoHeight = plan.photoHeightCm * scale;
+    const fontSize = Math.max(9, Math.min(30, Math.min(photoWidth, photoHeight) * 0.34));
+    const photos = plan.positions.map(position => {
+      const x = offsetX + position.xCm * scale, y = offsetY + position.yCm * scale;
+      return `<g><rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${photoWidth.toFixed(2)}" height="${photoHeight.toFixed(2)}" rx="5" fill="#ffffff" stroke="#111827" stroke-width="2"/><text x="${(x + photoWidth / 2).toFixed(2)}" y="${(y + photoHeight / 2).toFixed(2)}" text-anchor="middle" dominant-baseline="central" font-size="${fontSize.toFixed(1)}" font-weight="700" fill="#111827">${position.number}</text></g>`;
+    }).join('');
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${canvasWidth} ${canvasHeight}" role="img" aria-labelledby="title description">
+  <title id="title">Plano de colocación · ${xml(shapeLabel)}</title>
+  <desc id="description">Guía numerada para colocar ${plan.positions.length} fotografías.</desc>
+  <rect width="1200" height="1500" fill="#f8fafc"/>
+  <text x="70" y="82" font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif" font-size="48" font-weight="800" fill="#111827">PhotoMosaic · ${xml(shapeLabel)}</text>
+  <text x="70" y="138" font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif" font-size="27" fill="#334155">${plan.positions.length} fotos · pared ${plan.widthCm.toFixed(1)} × ${plan.heightCm.toFixed(1)} cm</text>
+  <text x="70" y="181" font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif" font-size="24" fill="#475569">Cada foto ${plan.photoWidthCm.toFixed(1)} × ${plan.photoHeightCm.toFixed(1)} cm · separación ${plan.gapCm.toFixed(1)} cm</text>
+  <text x="70" y="226" font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif" font-size="20" fill="#64748b">Empieza por la esquina superior izquierda y sigue la numeración.</text>
+  <g font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif">${photos}</g>
+  <text x="70" y="1415" font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif" font-size="21" fill="#475569">Guía visual de referencia · no imprimir a escala 1:1.</text>
+  <text x="70" y="1454" font-family="-apple-system,BlinkMacSystemFont,Arial,sans-serif" font-size="18" fill="#64748b">Procesado localmente en tu dispositivo.</text>
+</svg>`;
+  }
+
+  function installationPlanCsv(plan, filenames = []) {
+    if (!plan || !Array.isArray(plan.positions) || !plan.positions.length) throw new Error('Plano no válido');
+    const rows = [['Foto','Archivo','Fila','Columna','X desde izquierda (cm)','Y desde arriba (cm)'],
+      ...plan.positions.map((position, index) => [position.number, filenames[index] || '', position.row, position.column, position.xCm.toFixed(1), position.yCm.toFixed(1)])];
+    return '\uFEFF' + rows.map(row => row.map(value => '"' + String(value).replaceAll('"', '""') + '"').join(';')).join('\n');
+  }
+
   function trimSelection(items, count) {
     if (!Array.isArray(items)) throw new TypeError('Selección no válida');
     if (!Number.isInteger(count) || count < 0 || count > items.length) {
@@ -149,6 +190,6 @@
   }
 
   globalThis.PhotoMosaicShapes = {
-    SHAPES, shapeCells, validLayouts, shapeLimits, nearbyCounts, layoutForCount, installationPlan, trimSelection, pickUniqueTile
+    SHAPES, shapeCells, validLayouts, shapeLimits, nearbyCounts, layoutForCount, installationPlan, installationGuideSvg, installationPlanCsv, trimSelection, pickUniqueTile
   };
 })();
