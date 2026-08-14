@@ -9,6 +9,7 @@ Aplicación PWA para crear mosaicos de una foto principal usando 10 o más fotog
 - Memoria adaptada automáticamente al detalle, resolución y número de fotos; los lotes grandes limitan la decodificación de teselas para evitar cierres de Safari.
 - Ajuste de detalle, mezcla, resolución y variedad de fotografías.
 - Composición de pared con 16 contornos: corazón, círculo, óvalo, cuadrado, rombo, triángulo, estrella, hexágono, flor, luna, cruz, rayo, nube, mariposa, flecha y trébol.
+- Contorno personalizado dibujado con el dedo: permite crear cualquier silueta fuera del catálogo, cierra el trazo automáticamente y calcula las cantidades válidas de fotos.
 - Las fotografías ocupan solo el borde de la figura y dejan el interior vacío; no necesitan foto principal y cada imagen se usa una sola vez.
 - Cálculo automático del mínimo, máximo y cantidades válidas cercanas para montar el contorno físicamente.
 - Plano de montaje físico configurable: ancho y alto de cada foto, separación, medidas totales en pared y CSV numerado con fila, columna y coordenadas desde la esquina superior izquierda.

@@ -1,0 +1,4 @@
+.custom-shape{margin:8px 0 14px}
+.custom-shape canvas{display:block;width:100%;height:auto;aspect-ratio:8/5;border:2px solid #bfdbfe;border-radius:16px;touch-action:none;background:#f8fafc}
+.custom-shape button{width:100%;margin-top:8px;min-height:44px;background:#eef2ff;color:#1d4ed8}
+.custom-shape .hint{margin-bottom:0}

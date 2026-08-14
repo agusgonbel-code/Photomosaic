@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 await import('../shape-engine.js');
-const { SHAPES, shapeCells, shapeLimits, nearbyCounts, layoutForCount, installationPlan, installationGuideSvg, installationPlanCsv, trimSelection, pickUniqueTile } = globalThis.PhotoMosaicShapes;
+const { SHAPES, shapeCells, shapeLimits, nearbyCounts, layoutForCount, normalizeCustomOutline, customShapeCells, customShapeLimits, customNearbyCounts, customLayoutForCount, installationPlan, installationGuideSvg, installationPlanCsv, trimSelection, pickUniqueTile } = globalThis.PhotoMosaicShapes;
 
 assert.deepEqual(Object.keys(SHAPES), ['heart','circle','oval','square','diamond','triangle','star','hexagon','flower','crescent','cross','lightning','cloud','butterfly','arrow','clover']);
 assert.equal(Object.keys(SHAPES).length, 16);
@@ -21,6 +21,19 @@ const heartLimits = shapeLimits('heart');
 const heart = nearbyCounts('heart', 100);
 assert.ok(heart.exact === 100 || heart.lower < 100 || heart.upper > 100);
 assert.equal(layoutForCount('heart', heartLimits.minimum).cells.length, heartLimits.minimum);
+const customStroke = [{ x: .1, y: .1 }, { x: .9, y: .1 }, { x: .9, y: .9 }, { x: .1, y: .9 }];
+const normalizedStroke = normalizeCustomOutline(customStroke);
+assert.equal(normalizedStroke.length, 4);
+assert.ok(normalizedStroke.every(point => point.x >= 0 && point.x <= 1 && point.y >= 0 && point.y <= 1));
+const customCells = customShapeCells(customStroke, 12);
+assert.ok(customCells.length >= 10);
+assert.ok(customCells.every(cell => cell.row <= 1 || cell.row >= 10 || cell.column <= 1 || cell.column >= 10), 'El interior de una forma personalizada debe quedar vacío');
+const customLimits = customShapeLimits(customStroke);
+assert.ok(customLimits.minimum >= 10 && customLimits.maximum <= 300);
+const customNear = customNearbyCounts(customStroke, 100);
+assert.ok(customNear.exact === 100 || customNear.lower < 100 || customNear.upper > 100);
+assert.equal(customLayoutForCount(customStroke, customLimits.minimum).cells.length, customLimits.minimum);
+assert.throws(() => normalizeCustomOutline([{ x: .1, y: .1 }]), /más completo/);
 const photos = Array.from({ length: 100 }, (_, index) => ({ id: index }));
 const trimmed = trimSelection(photos, 90);
 assert.equal(trimmed.length, 90);

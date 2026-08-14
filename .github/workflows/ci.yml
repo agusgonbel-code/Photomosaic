@@ -23,6 +23,7 @@ jobs:
           node --check selection-controls.js
           node --check mosaic-engine.js
           node --check shape-engine.js
+          node --check custom-shape-ui.js
           node --check generation-controller.js
           node --check service-worker.js
       - name: Test shape engine
@@ -41,6 +42,8 @@ jobs:
           test -s dist/selection-controls.js
           test -s dist/mosaic-engine.js
           test -s dist/generation-controller.js
+          test -s dist/custom-shape-ui.js
+          test -s dist/custom-shape.css
           test -s dist/service-worker.js
           test -s dist/icons/icon-192.png
           test -s dist/icons/icon-512.png
@@ -62,6 +65,8 @@ jobs:
           test -s mosaic-engine.js
           test -s shape-engine.js
           test -s generation-controller.js
+          test -s custom-shape-ui.js
+          test -s custom-shape.css
           test -s service-worker.js
           test -s manifest.webmanifest
           test -s icons/icon-192.png
@@ -86,7 +91,9 @@ jobs:
           grep -q 'id="mosaicMode"' index.html
           grep -q 'id="shape"' index.html
           grep -q 'shape-engine.js' index.html
+          grep -q 'custom-shape-ui.js' index.html
           grep -q "'./shape-engine.js'" service-worker.js
+          grep -q "'./custom-shape-ui.js'" service-worker.js
           grep -q "image/png" mosaic-engine.js
           grep -q 'generation-controller.js' index.html
           grep -q "'./generation-controller.js'" service-worker.js
