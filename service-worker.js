@@ -1,4 +1,4 @@
-const CACHE_NAME='photomosaic-v9-selection-controls';
+const CACHE_NAME='photomosaic-v10-one-tap-shape-trim';
 const APP_SHELL=['./','./index.html','./styles.css','./mosaic-engine.js','./shape-engine.js','./generation-controller.js','./app.js','./selection-controls.js','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
