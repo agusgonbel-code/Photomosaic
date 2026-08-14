@@ -8,7 +8,7 @@ Aplicación PWA para crear mosaicos de una foto principal usando 10 o más fotog
 - Compatibilidad con JPG, PNG, WebP y HEIC/HEIF cuando el navegador pueda decodificarlos.
 - Memoria adaptada automáticamente al detalle, resolución y número de fotos; los lotes grandes limitan la decodificación de teselas para evitar cierres de Safari.
 - Ajuste de detalle, mezcla, resolución y variedad de fotografías.
-- Modo con forma: corazón, círculo, óvalo, cuadrado, rombo, triángulo, estrella, hexágono y flor.
+- Modo con forma: 16 formas: corazón, círculo, óvalo, cuadrado, rombo, triángulo, estrella, hexágono, flor, luna, cruz, rayo, nube, mariposa, flecha y trébol.
 - Cálculo automático del mínimo, máximo y cantidades válidas cercanas; cada foto seleccionada se usa una sola vez en la forma.
 - Ajuste flexible de la selección: muestra cuántas sobran o faltan, permite eliminar miniaturas individualmente o recortar con un toque hasta la cantidad válida inferior.
 - Tres modos de selección: color fiel, equilibrio o mayor diversidad; al terminar indica cuántas fotos diferentes se utilizaron.

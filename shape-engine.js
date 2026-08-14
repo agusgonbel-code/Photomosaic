@@ -10,7 +10,14 @@
     triangle: { label: 'Triángulo', min: 10 },
     star: { label: 'Estrella', min: 15 },
     hexagon: { label: 'Hexágono', min: 14 },
-    flower: { label: 'Flor', min: 16 }
+    flower: { label: 'Flor', min: 16 },
+    crescent: { label: 'Luna', min: 12 },
+    cross: { label: 'Cruz', min: 12 },
+    lightning: { label: 'Rayo', min: 12 },
+    cloud: { label: 'Nube', min: 14 },
+    butterfly: { label: 'Mariposa', min: 16 },
+    arrow: { label: 'Flecha', min: 12 },
+    clover: { label: 'Trébol', min: 16 }
   });
 
   function inside(shape, x, y) {
@@ -25,6 +32,13 @@
     if (shape === 'diamond') return ax + ay <= 1.15;
     if (shape === 'triangle') return y >= -0.78 && y <= 0.85 && ay ? ax <= (y + 0.86) * 0.72 : true;
     if (shape === 'hexagon') return ax <= 0.9 && ay <= 0.78 && ax + ay * 0.58 <= 1.18;
+    if (shape === 'crescent') return x * x + y * y <= 0.88 && (x - 0.34) * (x - 0.34) + y * y >= 0.58;
+    if (shape === 'cross') return (ax <= 0.28 && ay <= 0.9) || (ay <= 0.28 && ax <= 0.9);
+    if (shape === 'lightning') return y < -0.05 ? x >= -0.55 - y * 0.16 && x <= 0.22 - y * 0.16 : x >= -0.22 + y * 0.12 && x <= 0.58 + y * 0.12;
+    if (shape === 'cloud') return (y >= 0.05 && y <= 0.62 && ax <= 0.82) || (x + 0.46) ** 2 + (y - 0.05) ** 2 <= 0.25 || (x - 0.42) ** 2 + (y - 0.08) ** 2 <= 0.28 || x * x + (y + 0.2) ** 2 <= 0.34;
+    if (shape === 'butterfly') return ax <= 0.12 && ay <= 0.72 || ((ax - 0.43) ** 2 / 0.22 + (ay - 0.28) ** 2 / 0.36 <= 1);
+    if (shape === 'arrow') return (x >= -0.88 && x <= 0.2 && ay <= 0.28) || (x >= 0.08 && x <= 0.9 && ay <= 0.72 * (0.9 - x) / 0.82);
+    if (shape === 'clover') return x * x + y * y <= 0.16 || (x - 0.38) ** 2 + y * y <= 0.24 || (x + 0.38) ** 2 + y * y <= 0.24 || x * x + (y - 0.38) ** 2 <= 0.24 || x * x + (y + 0.38) ** 2 <= 0.24;
     const angle = Math.atan2(y, x);
     const radius = Math.hypot(x, y);
     if (shape === 'star') {
