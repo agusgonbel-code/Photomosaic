@@ -2,10 +2,13 @@ import assert from 'node:assert/strict';
 await import('../shape-engine.js');
 const { SHAPES, shapeCells, shapeLimits, nearbyCounts, layoutForCount, trimSelection, pickUniqueTile } = globalThis.PhotoMosaicShapes;
 
-assert.deepEqual(Object.keys(SHAPES), ['heart','circle','oval','square','diamond','triangle','star','hexagon','flower']);
+assert.deepEqual(Object.keys(SHAPES), ['heart','circle','oval','square','diamond','triangle','star','hexagon','flower','crescent','cross','lightning','cloud','butterfly','arrow','clover']);
+assert.equal(Object.keys(SHAPES).length, 16);
 for (const shape of Object.keys(SHAPES)) {
   const limits = shapeLimits(shape);
   assert.ok(limits.minimum >= 10);
+  assert.ok(limits.maximum <= 300);
+  assert.ok(layoutForCount(shape, limits.minimum), `${shape} debe aceptar su mínimo`);
   assert.ok(limits.maximum <= 300);
   assert.ok(shapeCells(shape, 12).every(cell => cell.row >= 0 && cell.column >= 0));
 }
