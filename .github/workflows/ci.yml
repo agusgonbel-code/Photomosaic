@@ -20,6 +20,7 @@ jobs:
       - name: Validate JavaScript
         run: |
           node --check app.js
+          node --check selection-controls.js
           node --check mosaic-engine.js
           node --check shape-engine.js
           node --check generation-controller.js
@@ -37,6 +38,7 @@ jobs:
         run: |
           test -s dist/index.html
           test -s dist/app.js
+          test -s dist/selection-controls.js
           test -s dist/mosaic-engine.js
           test -s dist/generation-controller.js
           test -s dist/service-worker.js
@@ -47,6 +49,7 @@ jobs:
           test ! -e dist/.github
           cmp --silent index.html dist/index.html
           cmp --silent app.js dist/app.js
+          cmp --silent selection-controls.js dist/selection-controls.js
       - name: Validate manifest
         run: node -e "JSON.parse(require('fs').readFileSync('manifest.webmanifest','utf8'))"
       - name: Verify application shell
@@ -55,6 +58,7 @@ jobs:
           test -s index.html
           test -s styles.css
           test -s app.js
+          test -s selection-controls.js
           test -s mosaic-engine.js
           test -s shape-engine.js
           test -s generation-controller.js
@@ -67,6 +71,8 @@ jobs:
           grep -q 'id="cancel"' index.html
           grep -q 'multiple' index.html
           grep -q 'navigator.canShare' app.js
+          grep -q 'selection-controls.js' index.html
+          grep -q "'./selection-controls.js'" service-worker.js
           grep -q 'id="exportFormat"' index.html
           grep -q 'id="mosaicMode"' index.html
           grep -q 'id="shape"' index.html
