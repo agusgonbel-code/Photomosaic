@@ -82,6 +82,14 @@
     return validLayouts(shape, maximum).find(item => item.count === Math.round(count)) || null;
   }
 
+  function trimSelection(items, count) {
+    if (!Array.isArray(items)) throw new TypeError('Selección no válida');
+    if (!Number.isInteger(count) || count < 0 || count > items.length) {
+      throw new Error('Cantidad de ajuste no válida');
+    }
+    return items.slice(0, count);
+  }
+
   function pickUniqueTile(color, tiles, used, distance) {
     let best = null, score = Infinity;
     for (const tile of tiles) {
@@ -94,6 +102,6 @@
   }
 
   globalThis.PhotoMosaicShapes = {
-    SHAPES, shapeCells, validLayouts, shapeLimits, nearbyCounts, layoutForCount, pickUniqueTile
+    SHAPES, shapeCells, validLayouts, shapeLimits, nearbyCounts, layoutForCount, trimSelection, pickUniqueTile
   };
 })();
