@@ -72,6 +72,8 @@ jobs:
           grep -q 'multiple' index.html
           grep -q 'navigator.canShare' app.js
           grep -q 'selection-controls.js' index.html
+          grep -q 'trimSelection' shape-engine.js
+          grep -q 'shape-trim' selection-controls.js
           grep -q "'./selection-controls.js'" service-worker.js
           grep -q 'id="exportFormat"' index.html
           grep -q 'id="mosaicMode"' index.html
