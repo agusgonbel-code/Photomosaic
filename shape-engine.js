@@ -103,6 +103,88 @@
     return validLayouts(shape, maximum).find(item => item.count === Math.round(count)) || null;
   }
 
+  function normalizeCustomOutline(points) {
+    if (!Array.isArray(points)) throw new TypeError('Contorno personalizado no válido');
+    const clean = [];
+    for (const point of points) {
+      const x = Number(point?.x), y = Number(point?.y);
+      if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+      const candidate = { x: Math.max(0, Math.min(1, x)), y: Math.max(0, Math.min(1, y)) };
+      const previous = clean.at(-1);
+      if (!previous || Math.hypot(candidate.x - previous.x, candidate.y - previous.y) >= 0.005) clean.push(candidate);
+    }
+    if (clean.length < 3) throw new Error('Dibuja un contorno más completo');
+    const xs = clean.map(point => point.x), ys = clean.map(point => point.y);
+    const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+    const width = maxX - minX, height = maxY - minY;
+    if (width < 0.05 || height < 0.05) throw new Error('El contorno es demasiado pequeño');
+    const scale = 0.84 / Math.max(width, height);
+    return clean.map(point => ({
+      x: (point.x - (minX + maxX) / 2) * scale + 0.5,
+      y: (point.y - (minY + maxY) / 2) * scale + 0.5
+    }));
+  }
+
+  function segmentDistance(point, start, end) {
+    const dx = end.x - start.x, dy = end.y - start.y;
+    const lengthSquared = dx * dx + dy * dy;
+    if (!lengthSquared) return Math.hypot(point.x - start.x, point.y - start.y);
+    const amount = Math.max(0, Math.min(1, ((point.x - start.x) * dx + (point.y - start.y) * dy) / lengthSquared));
+    return Math.hypot(point.x - (start.x + amount * dx), point.y - (start.y + amount * dy));
+  }
+
+  function customShapeCells(points, columns) {
+    if (!Number.isInteger(columns) || columns < 3 || columns > 80) throw new Error('Tamaño de forma no válido');
+    const outline = normalizeCustomOutline(points);
+    const segments = outline.map((point, index) => [point, outline[(index + 1) % outline.length]]);
+    const threshold = 0.72 / columns;
+    const cells = [];
+    for (let row = 0; row < columns; row++) {
+      for (let column = 0; column < columns; column++) {
+        const centre = { x: (column + 0.5) / columns, y: (row + 0.5) / columns };
+        if (segments.some(([start, end]) => segmentDistance(centre, start, end) <= threshold)) cells.push({ row, column });
+      }
+    }
+    return cells;
+  }
+
+  const customLayoutCache = new Map();
+
+  function customValidLayouts(points, maximum = 300) {
+    const cacheKey = maximum + ':' + (Array.isArray(points) ? points.map(point => `${Number(point?.x).toFixed(3)},${Number(point?.y).toFixed(3)}`).join(';') : 'invalid');
+    if (customLayoutCache.has(cacheKey)) return customLayoutCache.get(cacheKey);
+    const unique = new Map();
+    for (let columns = 3; columns <= 80; columns++) {
+      const cells = customShapeCells(points, columns), count = cells.length;
+      if (count >= 10 && count <= maximum && !unique.has(count)) unique.set(count, { shape: 'custom', columns, rows: columns, count, cells });
+    }
+    const layouts = [...unique.values()].sort((a, b) => a.count - b.count);
+    customLayoutCache.set(cacheKey, layouts);
+    if (customLayoutCache.size > 8) customLayoutCache.delete(customLayoutCache.keys().next().value);
+    return layouts;
+  }
+
+  function customShapeLimits(points, maximum = 300) {
+    const layouts = customValidLayouts(points, maximum);
+    if (!layouts.length) throw new Error('El trazo no produce tamaños válidos');
+    return { minimum: layouts[0].count, maximum: layouts.at(-1).count };
+  }
+
+  function customNearbyCounts(points, desired, maximum = 300) {
+    if (!Number.isFinite(desired)) throw new Error('Cantidad no válida');
+    const layouts = customValidLayouts(points, maximum), count = Math.round(desired);
+    const exact = layouts.find(item => item.count === count);
+    return {
+      exact: exact?.count ?? null,
+      lower: [...layouts].reverse().find(item => item.count < count)?.count ?? null,
+      upper: layouts.find(item => item.count > count)?.count ?? null
+    };
+  }
+
+  function customLayoutForCount(points, count, maximum = 300) {
+    return customValidLayouts(points, maximum).find(item => item.count === Math.round(count)) || null;
+  }
+
   function installationPlan(layout, options = {}) {
     if (!layout || !Array.isArray(layout.cells) || !layout.cells.length) throw new Error('Diseño no válido');
     const width = Number(options.photoWidthCm ?? 10);
@@ -190,6 +272,8 @@
   }
 
   globalThis.PhotoMosaicShapes = {
-    SHAPES, shapeCells, validLayouts, shapeLimits, nearbyCounts, layoutForCount, installationPlan, installationGuideSvg, installationPlanCsv, trimSelection, pickUniqueTile
+    SHAPES, shapeCells, validLayouts, shapeLimits, nearbyCounts, layoutForCount,
+    normalizeCustomOutline, customShapeCells, customValidLayouts, customShapeLimits, customNearbyCounts, customLayoutForCount,
+    installationPlan, installationGuideSvg, installationPlanCsv, trimSelection, pickUniqueTile
   };
 })();

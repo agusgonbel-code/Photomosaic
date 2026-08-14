@@ -35,7 +35,7 @@
 
   function refreshShapeHint(){
     shapeInfo.querySelector('.shape-adjustment')?.remove();
-    if(mode.value!=='shape'||!st.tiles.length)return;
+    if(mode.value!=='shape'||shape.value==='custom'||!st.tiles.length)return;
     const count=st.tiles.length;
     const near=shapeApi.nearbyCounts(shape.value,count);
     if(near.exact)return;
