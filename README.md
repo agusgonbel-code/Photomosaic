@@ -8,6 +8,8 @@ Aplicación PWA para crear mosaicos de una foto principal usando 10 o más fotog
 - Compatibilidad con JPG, PNG, WebP y HEIC/HEIF cuando el navegador pueda decodificarlos.
 - Memoria adaptada automáticamente al detalle, resolución y número de fotos; los lotes grandes limitan la decodificación de teselas para evitar cierres de Safari.
 - Ajuste de detalle, mezcla, resolución y variedad de fotografías.
+- Modo con forma: corazón, círculo, óvalo, cuadrado, rombo, triángulo, estrella, hexágono y flor.
+- Cálculo automático del mínimo, máximo y cantidades válidas cercanas; cada foto seleccionada se usa una sola vez en la forma.
 - Tres modos de selección: color fiel, equilibrio o mayor diversidad; al terminar indica cuántas fotos diferentes se utilizaron.
 - Generación cancelable: las selecciones y ajustes quedan bloqueados durante el cálculo para evitar resultados inconsistentes, y las fotos siguen disponibles al cancelar.
 - Guardado y hoja nativa de compartir del iPhone en JPEG optimizado o PNG sin pérdidas.
