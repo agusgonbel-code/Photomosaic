@@ -73,6 +73,9 @@ jobs:
           grep -q 'navigator.canShare' app.js
           grep -q 'selection-controls.js' index.html
           grep -q 'trimSelection' shape-engine.js
+          grep -q 'const neighbours' shape-engine.js
+          grep -q 'Contorno para pared' index.html
+          grep -q "hasSource=shaped||Boolean(st.target)" app.js
           grep -q "butterfly: { label: 'Mariposa'" shape-engine.js
           grep -q 'value="clover"' index.html
           grep -q 'shape-trim' selection-controls.js
