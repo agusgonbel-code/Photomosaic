@@ -4,7 +4,7 @@ import path from 'node:path';
 const root = path.resolve(import.meta.dirname, '..');
 const dist = path.join(root, 'dist');
 const publicFiles = [
-  'index.html', 'styles.css', 'app.js', 'mosaic-engine.js', 'generation-controller.js',
+  'index.html', 'styles.css', 'app.js', 'mosaic-engine.js', 'shape-engine.js', 'generation-controller.js',
   'service-worker.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'
 ];
 
@@ -21,7 +21,7 @@ await writeFile(path.join(dist, '.nojekyll'), '');
 const index = await readFile(path.join(dist, 'index.html'), 'utf8');
 const worker = await readFile(path.join(dist, 'service-worker.js'), 'utf8');
 const manifest = JSON.parse(await readFile(path.join(dist, 'manifest.webmanifest'), 'utf8'));
-for (const required of ['app.js', 'mosaic-engine.js', 'generation-controller.js', 'styles.css', 'manifest.webmanifest']) {
+for (const required of ['app.js', 'mosaic-engine.js', 'shape-engine.js', 'generation-controller.js', 'styles.css', 'manifest.webmanifest']) {
   if (!index.includes(required)) throw new Error(`index.html no referencia ${required}`);
 }
 for (const required of publicFiles.filter(file => file !== 'service-worker.js')) {

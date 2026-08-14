@@ -21,8 +21,11 @@ jobs:
         run: |
           node --check app.js
           node --check mosaic-engine.js
+          node --check shape-engine.js
           node --check generation-controller.js
           node --check service-worker.js
+      - name: Test shape engine
+        run: node --test tests/shape-engine.test.mjs
       - name: Test mosaic engine
         run: node --test tests/mosaic-engine.test.mjs
       - name: Test generation lifecycle
@@ -53,6 +56,7 @@ jobs:
           test -s styles.css
           test -s app.js
           test -s mosaic-engine.js
+          test -s shape-engine.js
           test -s generation-controller.js
           test -s service-worker.js
           test -s manifest.webmanifest
@@ -64,6 +68,10 @@ jobs:
           grep -q 'multiple' index.html
           grep -q 'navigator.canShare' app.js
           grep -q 'id="exportFormat"' index.html
+          grep -q 'id="mosaicMode"' index.html
+          grep -q 'id="shape"' index.html
+          grep -q 'shape-engine.js' index.html
+          grep -q "'./shape-engine.js'" service-worker.js
           grep -q "image/png" mosaic-engine.js
           grep -q 'generation-controller.js' index.html
           grep -q "'./generation-controller.js'" service-worker.js
