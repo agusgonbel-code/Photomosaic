@@ -63,5 +63,7 @@ jobs:
           grep -q 'id="cancel"' index.html
           grep -q 'multiple' index.html
           grep -q 'navigator.canShare' app.js
+          grep -q 'id="exportFormat"' index.html
+          grep -q "image/png" mosaic-engine.js
           grep -q 'generation-controller.js' index.html
           grep -q "'./generation-controller.js'" service-worker.js

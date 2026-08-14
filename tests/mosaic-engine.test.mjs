@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 await import('../mosaic-engine.js');
 const {
   isSupportedImageFile, estimateTileMemoryBytes, calculateTileDecodeSide,
-  colorDistance, calculateGrid, pickTile, usageStats
+  colorDistance, calculateGrid, pickTile, usageStats, exportOptions, exportFilename
 } = globalThis.PhotoMosaicEngine;
 
 assert.equal(isSupportedImageFile({ name: 'foto.HEIC', type: '', size: 1024 }, 2048), true);
@@ -49,5 +49,12 @@ assert.throws(() => pickTile([0, 0, 0], []));
 assert.deepEqual(usageStats(new Map([[0, 4], [1, 2], [2, 0]]), 6), {
   unique: 2, total: 6, mostUsed: 4
 });
+
+assert.deepEqual(exportOptions('jpeg'), { mimeType: 'image/jpeg', extension: 'jpg', quality: 0.94 });
+assert.deepEqual(exportOptions('PNG'), { mimeType: 'image/png', extension: 'png' });
+assert.equal(exportFilename('jpeg', new Date(2026, 7, 13, 23, 59)), 'photomosaic-2026-08-13.jpg');
+assert.equal(exportFilename('png', new Date(2024, 1, 29, 0, 1)), 'photomosaic-2024-02-29.png');
+assert.throws(() => exportOptions('gif'), /Formato/);
+assert.throws(() => exportFilename('jpeg', new Date(Number.NaN)), /Fecha/);
 
 console.log('Mosaic engine tests passed');
