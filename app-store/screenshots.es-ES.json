@@ -1,0 +1,75 @@
+{
+  "locale": "es-ES",
+  "platform": "IPHONE",
+  "orientation": "PORTRAIT",
+  "minimumScreenshots": 1,
+  "maximumScreenshots": 10,
+  "privacyRules": [
+    "Usar únicamente fotografías ficticias o recursos propios preparados para demostración.",
+    "No incluir rostros reconocibles, nombres, notificaciones, ubicaciones ni metadatos personales.",
+    "Capturar la interfaz real del binario final, sin marcos ni controles externos añadidos.",
+    "Mantener el mismo conjunto de fotos, ajustes y resultado en las escenas consecutivas."
+  ],
+  "scenes": [
+    {
+      "order": 1,
+      "id": "seleccion-privada",
+      "surface": "target",
+      "headline": "Tus fotos crean algo único",
+      "supportingText": "Elige una imagen objetivo y diez o más fotos desde el iPhone.",
+      "setup": [
+        "Preparar una foto objetivo ficticia y al menos doce imágenes de demostración.",
+        "Mostrar la foto objetivo seleccionada y el contador de teselas por encima de diez.",
+        "Comprobar que no aparecen nombres de archivos ni datos personales."
+      ]
+    },
+    {
+      "order": 2,
+      "id": "ajustes-mosaico",
+      "surface": "mosaicMode",
+      "headline": "Controla cada detalle",
+      "supportingText": "Ajusta definición, mezcla, variedad, resolución y formato.",
+      "setup": [
+        "Mantener las mismas imágenes de la primera escena.",
+        "Seleccionar mosaico rectangular, resolución alta, variedad equilibrada y JPEG.",
+        "Dejar visible el mensaje que confirma que el mosaico está listo para crear."
+      ]
+    },
+    {
+      "order": 3,
+      "id": "resultado-exportable",
+      "surface": "result",
+      "headline": "Un mosaico listo para compartir",
+      "supportingText": "Genera en el dispositivo y guarda en JPEG o PNG de calidad.",
+      "setup": [
+        "Crear el mosaico con el conjunto y los ajustes de las escenas anteriores.",
+        "Esperar a que la generación alcance el cien por cien antes de capturar.",
+        "Mostrar el resultado completo y la acción Guardar imagen."
+      ]
+    },
+    {
+      "order": 4,
+      "id": "contorno-pared",
+      "surface": "shapeControls",
+      "headline": "Diseña una pared con tus fotos",
+      "supportingText": "Elige una forma y conoce cuántas imágenes encajan exactamente.",
+      "setup": [
+        "Cambiar a Contorno para pared y seleccionar Corazón.",
+        "Usar una cantidad válida indicada por la propia aplicación.",
+        "Mostrar las medidas de foto, separación y tamaño total calculado."
+      ]
+    },
+    {
+      "order": 5,
+      "id": "plano-montaje",
+      "surface": "wallGuide",
+      "headline": "Del iPhone a tu pared",
+      "supportingText": "Obtén vista previa, plano numerado y coordenadas de montaje.",
+      "setup": [
+        "Generar el corazón usando exactamente la selección y medidas de la escena anterior.",
+        "Mostrar la vista previa completa, sus medidas y el texto de referencia de montaje.",
+        "Mantener visibles Plano visual numerado y Coordenadas CSV."
+      ]
+    }
+  ]
+}
