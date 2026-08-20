@@ -38,6 +38,8 @@ La identidad de cada entrega se controla desde `ios-release.json`. La primera ve
 
 La ficha española se conserva en `app-store/metadata.es-ES.json`. La validación de release comprueba automáticamente nombre, subtítulo, texto promocional, descripción, palabras clave, categoría, URLs y notas de revisión.
 
+El guion `app-store/screenshots.es-ES.json` fija cinco capturas verticales con datos ficticios para explicar selección, ajustes, resultado, contorno y plano. La validación comprueba el límite de App Store, el orden y que cada escena exista realmente en la interfaz.
+
 ## Privacidad y ficha de App Store
 - Política pública: `https://agusgonbel-code.github.io/Photomosaic/privacy.html`.
 - Soporte público: `https://agusgonbel-code.github.io/Photomosaic/support.html`.
