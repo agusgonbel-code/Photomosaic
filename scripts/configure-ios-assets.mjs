@@ -1,11 +1,11 @@
 import { execFile } from 'node:child_process';
-import { stat } from 'node:fs/promises';
+import { copyFile, readFile, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
 
 const root = path.resolve(import.meta.dirname, '..');
-const source = path.join(root, 'icons', 'icon-512.png');
-const destination = path.join(
+const iconSource = path.join(root, 'icons', 'icon-512.png');
+const iconDestination = path.join(
   root,
   'ios',
   'App',
@@ -14,9 +14,49 @@ const destination = path.join(
   'AppIcon.appiconset',
   'AppIcon-512@2x.png'
 );
+const privacySource = path.join(root, 'PrivacyInfo.xcprivacy');
+const privacyDestination = path.join(root, 'ios', 'App', 'App', 'PrivacyInfo.xcprivacy');
+const projectPath = path.join(root, 'ios', 'App', 'App.xcodeproj', 'project.pbxproj');
 
-await stat(destination).catch(() => {
-  throw new Error('No existe el proyecto iOS. Ejecuta primero `npx cap add ios`.');
+for (const file of [iconDestination, projectPath]) {
+  await stat(file).catch(() => {
+    throw new Error('No existe el proyecto iOS. Ejecuta primero `npx cap add ios`.');
+  });
+}
+await stat(privacySource).catch(() => {
+  throw new Error('Falta PrivacyInfo.xcprivacy en la raíz del proyecto.');
 });
-await promisify(execFile)('sips', ['-z', '1024', '1024', source, '--out', destination]);
-console.log('Icono nativo de PhotoMosaic instalado en el proyecto iOS.');
+
+await promisify(execFile)('sips', ['-z', '1024', '1024', iconSource, '--out', iconDestination]);
+await copyFile(privacySource, privacyDestination);
+
+let project = await readFile(projectPath, 'utf8');
+const fileRef = 'A11CE0010000000000000001';
+const buildRef = 'A11CE0010000000000000002';
+const buildLine = `\t\t${buildRef} /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = ${fileRef} /* PrivacyInfo.xcprivacy */; };\n`;
+const fileLine = `\t\t${fileRef} /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };\n`;
+const groupLine = `\t\t\t\t${fileRef} /* PrivacyInfo.xcprivacy */,\n`;
+const resourceLine = `\t\t\t\t${buildRef} /* PrivacyInfo.xcprivacy in Resources */,\n`;
+
+const addAfter = (source, anchor, addition, description) => {
+  if (source.includes(addition.trim())) return source;
+  if (!source.includes(anchor)) throw new Error(`No se encontró ${description} en el proyecto Xcode.`);
+  return source.replace(anchor, anchor + addition);
+};
+
+project = addAfter(project, '/* Begin PBXBuildFile section */\n', buildLine, 'PBXBuildFile');
+project = addAfter(project, '/* Begin PBXFileReference section */\n', fileLine, 'PBXFileReference');
+
+if (!project.includes(groupLine.trim())) {
+  const appGroup = /(\/\* App \*\/ = \{\n\t\t\tisa = PBXGroup;\n\t\t\tchildren = \(\n)/;
+  if (!appGroup.test(project)) throw new Error('No se encontró el grupo App en el proyecto Xcode.');
+  project = project.replace(appGroup, `$1${groupLine}`);
+}
+if (!project.includes(resourceLine.trim())) {
+  const resources = /(\/\* Resources \*\/ = \{\n\t\t\tisa = PBXResourcesBuildPhase;\n\t\t\tbuildActionMask = 2147483647;\n\t\t\tfiles = \(\n)/;
+  if (!resources.test(project)) throw new Error('No se encontró la fase Resources en el proyecto Xcode.');
+  project = project.replace(resources, `$1${resourceLine}`);
+}
+
+await writeFile(projectPath, project, 'utf8');
+console.log('Icono y manifiesto de privacidad instalados en el proyecto iOS.');
