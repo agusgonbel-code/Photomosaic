@@ -18,6 +18,7 @@ Aplicación PWA para crear mosaicos de una foto principal usando 10 o más fotog
 - Ajuste flexible de la selección: muestra cuántas sobran o faltan, permite eliminar miniaturas individualmente o recortar con un toque hasta la cantidad válida inferior.
 - Tres modos de selección: color fiel, equilibrio o mayor diversidad; al terminar indica cuántas fotos diferentes se utilizaron.
 - Generación cancelable: las selecciones y ajustes quedan bloqueados durante el cálculo para evitar resultados inconsistentes, y las fotos siguen disponibles al cancelar.
+- La lectura de cada imagen se puede cancelar incluso si el decodificador del iPhone queda bloqueado y termina automáticamente tras 20 segundos. Si la foto objetivo no puede leerse, se retira solo esa foto y se solicita otra compatible.
 - Guardado y hoja nativa de compartir del iPhone en JPEG optimizado o PNG sin pérdidas.
 - Instalación en la pantalla de inicio del iPhone o Android.
 - Paquete nativo reproducible con Capacitor 8 y compilación automática para simulador iOS antes de preparar TestFlight.
