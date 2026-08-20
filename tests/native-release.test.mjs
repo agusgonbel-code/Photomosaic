@@ -11,6 +11,7 @@ test('la configuración nativa conserva identidad, privacidad y paquete reproduc
   const validator = readFileSync(new URL('../scripts/validate-ios-release.mjs', import.meta.url), 'utf8');
   const release = JSON.parse(readFileSync(new URL('../ios-release.json', import.meta.url), 'utf8'));
   const metadata = JSON.parse(readFileSync(new URL('../app-store/metadata.es-ES.json', import.meta.url), 'utf8'));
+  const screenshots = JSON.parse(readFileSync(new URL('../app-store/screenshots.es-ES.json', import.meta.url), 'utf8'));
   const privacyManifest = readFileSync(new URL('../PrivacyInfo.xcprivacy', import.meta.url), 'utf8');
   const privacyPage = readFileSync(new URL('../privacy.html', import.meta.url), 'utf8');
   const supportPage = readFileSync(new URL('../support.html', import.meta.url), 'utf8');
@@ -34,6 +35,12 @@ test('la configuración nativa conserva identidad, privacidad y paquete reproduc
   assert.ok(metadata.subtitle.length <= 30);
   assert.ok(metadata.promotionalText.length <= 170);
   assert.ok(metadata.keywords.length <= 100);
+  assert.equal(screenshots.locale, metadata.locale);
+  assert.equal(screenshots.platform, 'IPHONE');
+  assert.equal(screenshots.orientation, 'PORTRAIT');
+  assert.equal(screenshots.scenes.length, 5);
+  assert.equal(screenshots.scenes[0].surface, 'target');
+  assert.equal(screenshots.scenes.at(-1).surface, 'wallGuide');
   assert.match(pkg.scripts['ios:add'], /ios:assets/);
   assert.match(pkg.scripts['ios:prepare'], /ios:assets/);
 
@@ -58,6 +65,8 @@ test('la configuración nativa conserva identidad, privacidad y paquete reproduc
   assert.match(validator, /icon\.readUInt32BE\(16\)/);
   assert.match(validator, /metadata\.promotionalText\.length/);
   assert.match(validator, /metadata\.keywords\.length/);
+  assert.match(validator, /screenshots\.maximumScreenshots/);
+  assert.match(validator, /fotografías ficticias/i);
 
   assert.match(privacyManifest, /<key>NSPrivacyTracking<\/key>\s*<false\/>/);
   assert.match(privacyManifest, /<key>NSPrivacyTrackingDomains<\/key>\s*<array\/>/);
