@@ -2,11 +2,16 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
-test('la configuración nativa conserva identidad y paquete web reproducible', () => {
+test('la configuración nativa conserva identidad, privacidad y paquete reproducible', () => {
   const config = JSON.parse(readFileSync(new URL('../capacitor.config.json', import.meta.url), 'utf8'));
   const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
   const build = readFileSync(new URL('../scripts/build-mobile.mjs', import.meta.url), 'utf8');
+  const site = readFileSync(new URL('../scripts/build-site.mjs', import.meta.url), 'utf8');
   const assets = readFileSync(new URL('../scripts/configure-ios-assets.mjs', import.meta.url), 'utf8');
+  const privacyManifest = readFileSync(new URL('../PrivacyInfo.xcprivacy', import.meta.url), 'utf8');
+  const privacyPage = readFileSync(new URL('../privacy.html', import.meta.url), 'utf8');
+  const supportPage = readFileSync(new URL('../support.html', import.meta.url), 'utf8');
+  const workflow = readFileSync(new URL('../.github/workflows/ios-native-ci.yml', import.meta.url), 'utf8');
 
   assert.equal(config.appId, 'com.agusgonbel.photomosaic');
   assert.equal(config.appName, 'PhotoMosaic');
@@ -16,13 +21,28 @@ test('la configuración nativa conserva identidad y paquete web reproducible', (
   assert.equal(pkg.devDependencies['@capacitor/cli'], '8.5.0');
   assert.match(pkg.scripts['ios:add'], /ios:assets/);
   assert.match(pkg.scripts['ios:prepare'], /ios:assets/);
-  for (const resource of ['index.html', 'app.js', 'shape-engine.js', 'icons/icon-512.png']) {
+
+  for (const resource of ['index.html', 'app.js', 'shape-engine.js', 'icons/icon-512.png', 'privacy.html', 'support.html']) {
     assert.ok(build.includes(`'${resource}'`), `Falta ${resource} en el paquete nativo`);
+    assert.ok(site.includes(`'${resource}'`), `Falta ${resource} en el sitio público`);
   }
   assert.match(build, /location\.protocol==='http:'/);
   assert.doesNotMatch(build, /'service-worker\.js'\s*,/);
+
   assert.match(assets, /icons.*icon-512\.png/s);
   assert.match(assets, /'sips'/);
   assert.match(assets, /'1024'/);
-  assert.match(assets, /AppIcon-512@2x\.png/);
+  assert.match(assets, /PrivacyInfo\.xcprivacy/);
+  assert.match(assets, /PBXResourcesBuildPhase/);
+  assert.match(assets, /PrivacyInfo\.xcprivacy in Resources/);
+
+  assert.match(privacyManifest, /<key>NSPrivacyTracking<\/key>\s*<false\/>/);
+  assert.match(privacyManifest, /<key>NSPrivacyTrackingDomains<\/key>\s*<array\/>/);
+  assert.match(privacyManifest, /<key>NSPrivacyCollectedDataTypes<\/key>\s*<array\/>/);
+  assert.match(privacyManifest, /<key>NSPrivacyAccessedAPITypes<\/key>\s*<array\/>/);
+  assert.match(privacyPage, /No recopilamos datos personales/);
+  assert.match(privacyPage, /procesa.*directamente en tu dispositivo/s);
+  assert.match(supportPage, /github\.com\/agusgonbel-code\/Photomosaic\/issues\/new/);
+  assert.match(workflow, /PrivacyInfo\.xcprivacy/);
+  assert.match(workflow, /plutil -lint/);
 });
