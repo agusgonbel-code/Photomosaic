@@ -19,6 +19,12 @@ La CI compila la configuración `Release` para simulador y valida dentro de `Pho
 
 La descripción diferencia explícitamente los dos productos de la aplicación: el mosaico construido a partir de una foto objetivo y el contorno para pared formado por fotografías completas con medidas reales, plano numerado y CSV.
 
+## Capturas españolas verificadas
+
+`app-store/screenshots.es-ES.json` define cinco capturas verticales y reproducibles: selección privada, ajustes del mosaico, resultado exportable, contorno para pared y plano de montaje. Cada escena enlaza con un control real de la interfaz, indica cómo preparar los datos y mantiene el mismo conjunto de fotografías entre pasos consecutivos.
+
+La validación exige entre una y diez escenas, orden e identificadores únicos, textos breves y superficies existentes. Solo se pueden utilizar imágenes ficticias o recursos propios preparados para demostración, sin rostros reconocibles, nombres, ubicaciones, notificaciones ni metadatos personales.
+
 ## Para crear la distribución firmada
 
 1. Incrementar `buildNumber` en `ios-release.json` para cada nueva subida.
@@ -27,6 +33,6 @@ La descripción diferencia explícitamente los dos productos de la aplicación: 
 4. Seleccionar el equipo de Apple Developer del propietario para el target `App`.
 5. Crear el archivo desde Xcode con `Product > Archive`.
 6. Validar y subir el archivo desde Organizer a App Store Connect.
-7. Copiar la ficha validada de `app-store/metadata.es-ES.json` y añadir capturas reales del binario.
+7. Copiar la ficha validada de `app-store/metadata.es-ES.json` y producir con el binario las escenas de `app-store/screenshots.es-ES.json`.
 
 La firma y la subida no deben automatizarse hasta disponer de acceso autorizado a Apple Developer y App Store Connect.
