@@ -26,12 +26,16 @@ jobs:
           node --check custom-shape-ui.js
           node --check generation-controller.js
           node --check service-worker.js
+          node --check scripts/build-mobile.mjs
+          node --check scripts/configure-ios-assets.mjs
       - name: Test shape engine
         run: node --test tests/shape-engine.test.mjs
       - name: Test mosaic engine
         run: node --test tests/mosaic-engine.test.mjs
       - name: Test generation lifecycle
         run: node --test tests/generation-controller.test.mjs
+      - name: Test native release configuration
+        run: node --test tests/native-release.test.mjs
       - name: Build public site
         run: node scripts/build-site.mjs
       - name: Verify minimal publication artifact
