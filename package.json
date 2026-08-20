@@ -1,0 +1,21 @@
+{
+  "name": "photomosaic",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PhotoMosaic para web e iPhone",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "build:site": "node scripts/build-site.mjs",
+    "build:mobile": "node scripts/build-mobile.mjs",
+    "ios:add": "npm run build:mobile && cap add ios && npm run ios:assets",
+    "ios:assets": "node scripts/configure-ios-assets.mjs",
+    "ios:prepare": "npm run build:mobile && cap sync ios && npm run ios:assets",
+    "ios:open": "npm run ios:prepare && cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/core": "8.5.0",
+    "@capacitor/ios": "8.5.0"
+  },
+  "devDependencies": { "@capacitor/cli": "8.5.0" }
+}

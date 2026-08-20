@@ -20,6 +20,7 @@ Aplicación PWA para crear mosaicos de una foto principal usando 10 o más fotog
 - Generación cancelable: las selecciones y ajustes quedan bloqueados durante el cálculo para evitar resultados inconsistentes, y las fotos siguen disponibles al cancelar.
 - Guardado y hoja nativa de compartir del iPhone en JPEG optimizado o PNG sin pérdidas.
 - Instalación en la pantalla de inicio del iPhone o Android.
+- Paquete nativo reproducible con Capacitor 8 y compilación automática para simulador iOS antes de preparar TestFlight.
 
 ## Probar en ordenador
 Dentro de la carpeta ejecuta `python -m http.server 8080` y abre `http://localhost:8080`.
@@ -29,3 +30,6 @@ Al fusionar el PR en `main`, GitHub Actions construye un paquete mínimo y lo de
 
 ## Instalar en iPhone
 Abre la URL publicada en Safari > Compartir > Añadir a pantalla de inicio.
+
+## Preparar la versión nativa de iPhone
+Con Node.js 22 o posterior: `npm install`, `npm run ios:add` y `npm run ios:open`. La rama se valida también en macOS con Xcode, instala el icono nativo de PhotoMosaic y conserva el identificador `com.agusgonbel.photomosaic`; la firma, el equipo de Apple Developer y la subida a TestFlight se configuran únicamente al preparar la distribución.
