@@ -4,7 +4,7 @@ import path from 'node:path';
 const root = path.resolve(import.meta.dirname, '..');
 const destination = path.join(root, 'www');
 const files = [
-  'index.html', 'styles.css', 'custom-shape.css', 'app.js', 'selection-controls.js',
+  'index.html', 'privacy.html', 'support.html', 'styles.css', 'custom-shape.css', 'app.js', 'selection-controls.js',
   'mosaic-engine.js', 'shape-engine.js', 'custom-shape-ui.js', 'generation-controller.js',
   'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'
 ];
@@ -30,4 +30,3 @@ app = app.replace(
 await writeFile(appPath, app, 'utf8');
 
 console.log(`Build móvil listo: ${files.length} recursos en www/`);
-
