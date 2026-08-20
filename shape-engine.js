@@ -211,6 +211,30 @@
     };
   }
 
+  function wallPreviewGeometry(plan, maximumPixels = 2200) {
+    if (!plan || !Array.isArray(plan.positions) || !plan.positions.length ||
+        !Number.isFinite(plan.widthCm) || plan.widthCm <= 0 ||
+        !Number.isFinite(plan.heightCm) || plan.heightCm <= 0) {
+      throw new Error('Plano no válido');
+    }
+    const limit = Number(maximumPixels);
+    if (!Number.isFinite(limit) || limit < 320 || limit > 4096) throw new Error('Resolución no válida');
+    const scale = limit / Math.max(plan.widthCm, plan.heightCm);
+    const width = Math.max(1, Math.round(plan.widthCm * scale));
+    const height = Math.max(1, Math.round(plan.heightCm * scale));
+    return {
+      width,
+      height,
+      positions: plan.positions.map(position => {
+        const x = Math.round(position.xCm * scale);
+        const y = Math.round(position.yCm * scale);
+        const right = Math.round((position.xCm + plan.photoWidthCm) * scale);
+        const bottom = Math.round((position.yCm + plan.photoHeightCm) * scale);
+        return { ...position, x, y, width: Math.max(1, right - x), height: Math.max(1, bottom - y) };
+      })
+    };
+  }
+
   const xml = value => String(value ?? '').replace(/[&<>"']/g, character => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;'
   })[character]);
@@ -274,6 +298,6 @@
   globalThis.PhotoMosaicShapes = {
     SHAPES, shapeCells, validLayouts, shapeLimits, nearbyCounts, layoutForCount,
     normalizeCustomOutline, customShapeCells, customValidLayouts, customShapeLimits, customNearbyCounts, customLayoutForCount,
-    installationPlan, installationGuideSvg, installationPlanCsv, trimSelection, pickUniqueTile
+    installationPlan, wallPreviewGeometry, installationGuideSvg, installationPlanCsv, trimSelection, pickUniqueTile
   };
 })();
