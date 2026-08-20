@@ -3,10 +3,38 @@ name: PhotoMosaic iOS Native CI
 on:
   workflow_dispatch:
   pull_request:
-    paths: ['index.html', '*.js', '*.css', 'icons/**', 'tests/**', 'package.json', 'capacitor.config.json', 'scripts/build-mobile.mjs', '.github/workflows/ios-native-ci.yml']
+    paths:
+      - 'index.html'
+      - 'privacy.html'
+      - 'support.html'
+      - 'PrivacyInfo.xcprivacy'
+      - '*.js'
+      - '*.css'
+      - 'icons/**'
+      - 'tests/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'capacitor.config.json'
+      - 'scripts/build-mobile.mjs'
+      - 'scripts/configure-ios-assets.mjs'
+      - '.github/workflows/ios-native-ci.yml'
   push:
     branches: [main]
-    paths: ['index.html', '*.js', '*.css', 'icons/**', 'tests/**', 'package.json', 'capacitor.config.json', 'scripts/build-mobile.mjs', '.github/workflows/ios-native-ci.yml']
+    paths:
+      - 'index.html'
+      - 'privacy.html'
+      - 'support.html'
+      - 'PrivacyInfo.xcprivacy'
+      - '*.js'
+      - '*.css'
+      - 'icons/**'
+      - 'tests/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'capacitor.config.json'
+      - 'scripts/build-mobile.mjs'
+      - 'scripts/configure-ios-assets.mjs'
+      - '.github/workflows/ios-native-ci.yml'
 
 permissions:
   contents: read
@@ -40,7 +68,7 @@ jobs:
         run: npm run build:mobile
       - name: Generate native iOS project
         run: npx cap add ios
-      - name: Install PhotoMosaic native assets
+      - name: Install PhotoMosaic native assets and privacy manifest
         run: npm run ios:assets
       - name: Validate Capacitor configuration
         run: npx cap doctor ios
@@ -55,7 +83,7 @@ jobs:
             -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO \
             build
-      - name: Validate application identity
+      - name: Validate application identity and privacy
         id: app
         shell: bash
         run: |
@@ -63,9 +91,17 @@ jobs:
           APP_PATH="$(find "$HOME/Library/Developer/Xcode/DerivedData" -path '*Build/Products/Debug-iphonesimulator/App.app' -print -quit)"
           test -n "$APP_PATH"
           PLIST="$APP_PATH/Info.plist"
+          PRIVACY="$APP_PATH/PrivacyInfo.xcprivacy"
           BUNDLE_ID="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$PLIST")"
           test "$BUNDLE_ID" = 'com.agusgonbel.photomosaic'
+          test -f "$APP_PATH/public/privacy.html"
+          test -f "$APP_PATH/public/support.html"
+          test -f "$PRIVACY"
+          plutil -lint "$PRIVACY"
+          test "$(plutil -extract NSPrivacyTracking raw -o - "$PRIVACY")" = 'false'
+          test "$(plutil -extract NSPrivacyCollectedDataTypes json -o - "$PRIVACY")" = '[]'
           echo "Bundle ID: $BUNDLE_ID"
+          echo "Privacy manifest: valid"
           echo "path=$APP_PATH" >> "$GITHUB_OUTPUT"
       - name: Stage simulator artifact
         shell: bash

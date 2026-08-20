@@ -33,3 +33,13 @@ Abre la URL publicada en Safari > Compartir > Añadir a pantalla de inicio.
 
 ## Preparar la versión nativa de iPhone
 Con Node.js 22 o posterior: `npm install`, `npm run ios:add` y `npm run ios:open`. La rama se valida también en macOS con Xcode, instala el icono nativo de PhotoMosaic y conserva el identificador `com.agusgonbel.photomosaic`; la firma, el equipo de Apple Developer y la subida a TestFlight se configuran únicamente al preparar la distribución.
+
+## Privacidad y ficha de App Store
+- Política pública: `https://agusgonbel-code.github.io/Photomosaic/privacy.html`.
+- Soporte público: `https://agusgonbel-code.github.io/Photomosaic/support.html`.
+- El paquete nativo incluye `PrivacyInfo.xcprivacy`: no declara seguimiento ni recopilación de datos por PhotoMosaic.
+- Las fotos seleccionadas y los trazos se procesan en el dispositivo; no hay cuentas, anuncios ni analítica.
+- Antes de cada distribución, GitHub Actions valida el manifiesto, las páginas legales y su presencia dentro de `PhotoMosaic.app`.
+
+La declaración final de privacidad en App Store Connect debe revisarse de nuevo si se incorporan servicios externos, analítica, publicidad o procesamiento remoto.
+
