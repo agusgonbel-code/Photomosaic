@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 await import('../shape-engine.js');
-const { SHAPES, shapeCells, shapeLimits, nearbyCounts, layoutForCount, normalizeCustomOutline, customShapeCells, customShapeLimits, customNearbyCounts, customLayoutForCount, installationPlan, installationGuideSvg, installationPlanCsv, trimSelection, pickUniqueTile } = globalThis.PhotoMosaicShapes;
+const { SHAPES, shapeCells, shapeLimits, nearbyCounts, layoutForCount, normalizeCustomOutline, customShapeCells, customShapeLimits, customNearbyCounts, customLayoutForCount, installationPlan, wallPreviewGeometry, installationGuideSvg, installationPlanCsv, trimSelection, pickUniqueTile } = globalThis.PhotoMosaicShapes;
 
 assert.deepEqual(Object.keys(SHAPES), ['heart','circle','oval','square','diamond','triangle','star','hexagon','flower','crescent','cross','lightning','cloud','butterfly','arrow','clover']);
 assert.equal(Object.keys(SHAPES).length, 16);
@@ -59,6 +59,18 @@ assert.deepEqual(wallPlan.positions.map(({ number, xCm, yCm }) => ({ number, xCm
 ]);
 assert.throws(() => installationPlan(wallLayout, { photoWidthCm: 2 }), /Medidas no válidas/);
 assert.throws(() => installationPlan({ cells: [] }), /Diseño no válido/);
+
+const preview = wallPreviewGeometry(wallPlan, 1600);
+assert.deepEqual({ width: preview.width, height: preview.height }, { width: 1100, height: 1600 });
+assert.deepEqual(preview.positions.map(({ x, y, width, height }) => ({ x, y, width, height })), [
+  { x: 0, y: 0, width: 500, height: 750 },
+  { x: 600, y: 0, width: 500, height: 750 },
+  { x: 600, y: 850, width: 500, height: 750 }
+]);
+assert.equal(preview.positions[1].x - preview.positions[0].width, 100, 'La vista previa debe conservar la separación horizontal');
+assert.equal(preview.positions[2].y - preview.positions[1].height, 100, 'La vista previa debe conservar la separación vertical');
+assert.throws(() => wallPreviewGeometry(null), /Plano no válido/);
+assert.throws(() => wallPreviewGeometry(wallPlan, 100), /Resolución no válida/);
 
 const visualGuide = installationGuideSvg(wallPlan, { shapeLabel: 'Corazón <familiar>' });
 assert.match(visualGuide, /Plano de colocación/);
