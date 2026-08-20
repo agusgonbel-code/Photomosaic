@@ -36,6 +36,8 @@ Con Node.js 22 o posterior: `npm install`, `npm run ios:release:check`, `npm run
 
 La identidad de cada entrega se controla desde `ios-release.json`. La primera versión está fijada como `1.0.0` (build `1`) para iOS 15 o posterior. La CI genera una compilación `Release` y abre su `Info.plist` para comprobar nombre, identificador, versión, build y sistema mínimo antes de conservar el artefacto.
 
+La ficha española se conserva en `app-store/metadata.es-ES.json`. La validación de release comprueba automáticamente nombre, subtítulo, texto promocional, descripción, palabras clave, categoría, URLs y notas de revisión.
+
 ## Privacidad y ficha de App Store
 - Política pública: `https://agusgonbel-code.github.io/Photomosaic/privacy.html`.
 - Soporte público: `https://agusgonbel-code.github.io/Photomosaic/support.html`.
