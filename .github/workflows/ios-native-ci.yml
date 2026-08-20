@@ -1,0 +1,81 @@
+name: PhotoMosaic iOS Native CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths: ['index.html', '*.js', '*.css', 'icons/**', 'tests/**', 'package.json', 'capacitor.config.json', 'scripts/build-mobile.mjs', '.github/workflows/ios-native-ci.yml']
+  push:
+    branches: [main]
+    paths: ['index.html', '*.js', '*.css', 'icons/**', 'tests/**', 'package.json', 'capacitor.config.json', 'scripts/build-mobile.mjs', '.github/workflows/ios-native-ci.yml']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: photomosaic-ios-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-ios-simulator:
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Verify Xcode and iOS SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          SDK_VERSION="$(xcrun --sdk iphoneos --show-sdk-version)"
+          echo "iPhoneOS SDK: $SDK_VERSION"
+          test "${SDK_VERSION%%.*}" -ge 26
+      - name: Install Capacitor
+        run: npm ci --no-audit --no-fund
+      - name: Run complete test suite
+        run: npm test
+      - name: Build bundled web assets
+        run: npm run build:mobile
+      - name: Generate native iOS project
+        run: npx cap add ios
+      - name: Install PhotoMosaic native assets
+        run: npm run ios:assets
+      - name: Validate Capacitor configuration
+        run: npx cap doctor ios
+      - name: Compile for iOS Simulator without signing
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+      - name: Validate application identity
+        id: app
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP_PATH="$(find "$HOME/Library/Developer/Xcode/DerivedData" -path '*Build/Products/Debug-iphonesimulator/App.app' -print -quit)"
+          test -n "$APP_PATH"
+          PLIST="$APP_PATH/Info.plist"
+          BUNDLE_ID="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$PLIST")"
+          test "$BUNDLE_ID" = 'com.agusgonbel.photomosaic'
+          echo "Bundle ID: $BUNDLE_ID"
+          echo "path=$APP_PATH" >> "$GITHUB_OUTPUT"
+      - name: Stage simulator artifact
+        shell: bash
+        run: |
+          mkdir artifact
+          cp -R "${{ steps.app.outputs.path }}" artifact/PhotoMosaic.app
+      - name: Upload simulator application
+        uses: actions/upload-artifact@v4
+        with:
+          name: PhotoMosaic-iOS-Simulator-${{ github.sha }}
+          path: artifact/PhotoMosaic.app
+          if-no-files-found: error
+          retention-days: 14
