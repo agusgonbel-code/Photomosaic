@@ -1,0 +1,12 @@
+{
+  "locale": "es-ES",
+  "name": "PhotoMosaic",
+  "subtitle": "Tus recuerdos crean arte",
+  "promotionalText": "Convierte tus fotos favoritas en mosaicos o diseña composiciones de pared con medidas reales, plano numerado y exportación de calidad.",
+  "description": "PhotoMosaic transforma tus recuerdos en composiciones visuales creadas directamente en el iPhone.\n\nMOSAICOS FOTOGRÁFICOS\n• Elige una foto objetivo y selecciona 10 o más fotografías.\n• Ajusta cuadrícula, intensidad y formato antes de generar.\n• Procesa las imágenes localmente, sin subirlas a servidores.\n• Exporta el resultado en PNG o JPEG con control de calidad.\n\nCONTORNOS PARA PARED\n• Crea formas con las propias fotografías, no recortes de un mosaico.\n• Utiliza diseños predeterminados o dibuja un contorno personalizado.\n• Configura tamaño real de las fotos y separación entre ellas.\n• Recibe una vista previa fiel, un plano numerado y un archivo CSV para montar la composición con cuadros o sin ellos.\n\nCONTROL Y PRIVACIDAD\n• Revisa cuántas fotos admite cada diseño.\n• Elimina fotografías seleccionadas antes de generar.\n• Cancela procesos largos de forma segura.\n• Todo el procesamiento se realiza en tu dispositivo.\n\nPhotoMosaic no requiere cuenta y no incluye publicidad ni seguimiento.",
+  "keywords": "mosaico,fotos,collage,pared,cuadros,recuerdos,diseño,composición,impresión,arte",
+  "primaryCategory": "PHOTO_AND_VIDEO",
+  "privacyUrl": "https://agusgonbel-code.github.io/Photomosaic/privacy.html",
+  "supportUrl": "https://agusgonbel-code.github.io/Photomosaic/support.html",
+  "reviewNotes": "No requiere cuenta. Para probar un mosaico, seleccione una foto objetivo y 10 o más fotos. En Contorno para pared puede elegir una forma, indicar medidas reales y exportar vista previa, plano numerado y CSV."
+}

@@ -28,6 +28,7 @@ jobs:
           node --check service-worker.js
           node --check scripts/build-mobile.mjs
           node --check scripts/configure-ios-assets.mjs
+          node --check scripts/validate-ios-release.mjs
       - name: Test shape engine
         run: node --test tests/shape-engine.test.mjs
       - name: Test mosaic engine
@@ -36,6 +37,8 @@ jobs:
         run: node --test tests/generation-controller.test.mjs
       - name: Test native release configuration
         run: node --test tests/native-release.test.mjs
+      - name: Validate App Store release identity
+        run: npm run ios:release:check
       - name: Build public site
         run: node scripts/build-site.mjs
       - name: Verify minimal publication artifact

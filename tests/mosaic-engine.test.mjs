@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 await import('../mosaic-engine.js');
 const {
   isSupportedImageFile, estimateTileMemoryBytes, calculateTileDecodeSide,
-  colorDistance, calculateGrid, pickTile, usageStats, exportOptions, exportFilename
+  colorDistance, calculateGrid, pickTile, usageStats, reconcileDecodedFiles,
+  exportOptions, exportFilename
 } = globalThis.PhotoMosaicEngine;
 
 assert.equal(isSupportedImageFile({ name: 'foto.HEIC', type: '', size: 1024 }, 2048), true);
@@ -20,6 +21,14 @@ assert.equal(estimateTileMemoryBytes(boundedSide, 300) <= 36 * 1024 * 1024, true
 assert.equal(calculateTileDecodeSide(3200, 15, 3, 10), 384);
 assert.throws(() => calculateTileDecodeSide(3200, 15, 3, 0));
 assert.throws(() => estimateTileMemoryBytes(0, 10));
+
+const selectedFiles = [{ name: 'a.jpg' }, { name: 'b.heic' }, { name: 'c.png' }];
+const decodedSelection = reconcileDecodedFiles(selectedFiles, [0, 2]);
+assert.deepEqual(decodedSelection.accepted, [selectedFiles[0], selectedFiles[2]]);
+assert.deepEqual(decodedSelection.rejected, [selectedFiles[1]]);
+assert.deepEqual(selectedFiles.map(file => file.name), ['a.jpg', 'b.heic', 'c.png'], 'La reconciliación no debe mutar la selección');
+assert.throws(() => reconcileDecodedFiles(selectedFiles, [3]), /Índice/);
+assert.throws(() => reconcileDecodedFiles(null, []), /lectura/);
 
 assert.equal(colorDistance([20, 40, 60], [20, 40, 60]), 0);
 assert.equal(colorDistance([0, 0, 0], [255, 255, 255]) > 700, true);

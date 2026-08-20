@@ -108,6 +108,23 @@
     };
   }
 
+  function reconcileDecodedFiles(files, decodedIndices) {
+    if (!Array.isArray(files) || !Array.isArray(decodedIndices)) {
+      throw new Error('Resultado de lectura de fotos no válido');
+    }
+    const acceptedIndices = new Set();
+    for (const index of decodedIndices) {
+      if (!Number.isInteger(index) || index < 0 || index >= files.length) {
+        throw new Error('Índice de foto decodificada no válido');
+      }
+      acceptedIndices.add(index);
+    }
+    return files.reduce((result, file, index) => {
+      result[acceptedIndices.has(index) ? 'accepted' : 'rejected'].push(file);
+      return result;
+    }, { accepted: [], rejected: [] });
+  }
+
 
   const EXPORT_FORMATS = Object.freeze({
     jpeg: Object.freeze({ mimeType: 'image/jpeg', extension: 'jpg', quality: 0.94 }),
@@ -133,6 +150,7 @@
 
   globalThis.PhotoMosaicEngine = {
     isSupportedImageFile, estimateTileMemoryBytes, calculateTileDecodeSide,
-    colorDistance, calculateGrid, pickTile, usageStats, exportOptions, exportFilename
+    colorDistance, calculateGrid, pickTile, usageStats, reconcileDecodedFiles,
+    exportOptions, exportFilename
   };
 })();

@@ -18,6 +18,7 @@ Aplicación PWA para crear mosaicos de una foto principal usando 10 o más fotog
 - Ajuste flexible de la selección: muestra cuántas sobran o faltan, permite eliminar miniaturas individualmente o recortar con un toque hasta la cantidad válida inferior.
 - Tres modos de selección: color fiel, equilibrio o mayor diversidad; al terminar indica cuántas fotos diferentes se utilizaron.
 - Generación cancelable: las selecciones y ajustes quedan bloqueados durante el cálculo para evitar resultados inconsistentes, y las fotos siguen disponibles al cancelar.
+- La lectura de cada imagen se puede cancelar incluso si el decodificador del iPhone queda bloqueado y termina automáticamente tras 20 segundos. Si la foto objetivo no puede leerse, se retira solo esa foto y se solicita otra compatible.
 - Guardado y hoja nativa de compartir del iPhone en JPEG optimizado o PNG sin pérdidas.
 - Instalación en la pantalla de inicio del iPhone o Android.
 - Paquete nativo reproducible con Capacitor 8 y compilación automática para simulador iOS antes de preparar TestFlight.
@@ -32,7 +33,13 @@ Al fusionar el PR en `main`, GitHub Actions construye un paquete mínimo y lo de
 Abre la URL publicada en Safari > Compartir > Añadir a pantalla de inicio.
 
 ## Preparar la versión nativa de iPhone
-Con Node.js 22 o posterior: `npm install`, `npm run ios:add` y `npm run ios:open`. La rama se valida también en macOS con Xcode, instala el icono nativo de PhotoMosaic y conserva el identificador `com.agusgonbel.photomosaic`; la firma, el equipo de Apple Developer y la subida a TestFlight se configuran únicamente al preparar la distribución.
+Con Node.js 22 o posterior: `npm install`, `npm run ios:release:check`, `npm run ios:add` y `npm run ios:open`. La rama se valida también en macOS con Xcode, instala el icono nativo de PhotoMosaic y conserva el identificador `com.agusgonbel.photomosaic`; la firma, el equipo de Apple Developer y la subida a TestFlight se configuran únicamente al preparar la distribución.
+
+La identidad de cada entrega se controla desde `ios-release.json`. La primera versión está fijada como `1.0.0` (build `1`) para iOS 15 o posterior. La CI genera una compilación `Release` y abre su `Info.plist` para comprobar nombre, identificador, versión, build y sistema mínimo antes de conservar el artefacto.
+
+La ficha española se conserva en `app-store/metadata.es-ES.json`. La validación de release comprueba automáticamente nombre, subtítulo, texto promocional, descripción, palabras clave, categoría, URLs y notas de revisión.
+
+El guion `app-store/screenshots.es-ES.json` fija cinco capturas verticales con datos ficticios para explicar selección, ajustes, resultado, contorno y plano. La validación comprueba el límite de App Store, el orden y que cada escena exista realmente en la interfaz.
 
 ## Privacidad y ficha de App Store
 - Política pública: `https://agusgonbel-code.github.io/Photomosaic/privacy.html`.
@@ -42,4 +49,3 @@ Con Node.js 22 o posterior: `npm install`, `npm run ios:add` y `npm run ios:open
 - Antes de cada distribución, GitHub Actions valida el manifiesto, las páginas legales y su presencia dentro de `PhotoMosaic.app`.
 
 La declaración final de privacidad en App Store Connect debe revisarse de nuevo si se incorporan servicios externos, analítica, publicidad o procesamiento remoto.
-
