@@ -8,6 +8,8 @@ test('la configuración nativa conserva identidad, privacidad y paquete reproduc
   const build = readFileSync(new URL('../scripts/build-mobile.mjs', import.meta.url), 'utf8');
   const site = readFileSync(new URL('../scripts/build-site.mjs', import.meta.url), 'utf8');
   const assets = readFileSync(new URL('../scripts/configure-ios-assets.mjs', import.meta.url), 'utf8');
+  const validator = readFileSync(new URL('../scripts/validate-ios-release.mjs', import.meta.url), 'utf8');
+  const release = JSON.parse(readFileSync(new URL('../ios-release.json', import.meta.url), 'utf8'));
   const privacyManifest = readFileSync(new URL('../PrivacyInfo.xcprivacy', import.meta.url), 'utf8');
   const privacyPage = readFileSync(new URL('../privacy.html', import.meta.url), 'utf8');
   const supportPage = readFileSync(new URL('../support.html', import.meta.url), 'utf8');
@@ -19,6 +21,12 @@ test('la configuración nativa conserva identidad, privacidad y paquete reproduc
   assert.equal(pkg.dependencies['@capacitor/core'], '8.5.0');
   assert.equal(pkg.dependencies['@capacitor/ios'], '8.5.0');
   assert.equal(pkg.devDependencies['@capacitor/cli'], '8.5.0');
+  assert.equal(release.bundleId, config.appId);
+  assert.equal(release.displayName, config.appName);
+  assert.equal(release.marketingVersion, pkg.version);
+  assert.ok(Number.isInteger(release.buildNumber) && release.buildNumber > 0);
+  assert.equal(release.minimumIOSVersion, '15.0');
+  assert.equal(pkg.scripts['ios:release:check'], 'node scripts/validate-ios-release.mjs');
   assert.match(pkg.scripts['ios:add'], /ios:assets/);
   assert.match(pkg.scripts['ios:prepare'], /ios:assets/);
 
@@ -35,6 +43,12 @@ test('la configuración nativa conserva identidad, privacidad y paquete reproduc
   assert.match(assets, /PrivacyInfo\.xcprivacy/);
   assert.match(assets, /PBXResourcesBuildPhase/);
   assert.match(assets, /PrivacyInfo\.xcprivacy in Resources/);
+  assert.match(assets, /MARKETING_VERSION/);
+  assert.match(assets, /CURRENT_PROJECT_VERSION/);
+  assert.match(assets, /IPHONEOS_DEPLOYMENT_TARGET/);
+  assert.match(assets, /CFBundleDisplayName/);
+  assert.match(validator, /release\.bundleId, capacitor\.appId/);
+  assert.match(validator, /icon\.readUInt32BE\(16\)/);
 
   assert.match(privacyManifest, /<key>NSPrivacyTracking<\/key>\s*<false\/>/);
   assert.match(privacyManifest, /<key>NSPrivacyTrackingDomains<\/key>\s*<array\/>/);
@@ -45,4 +59,7 @@ test('la configuración nativa conserva identidad, privacidad y paquete reproduc
   assert.match(supportPage, /github\.com\/agusgonbel-code\/Photomosaic\/issues\/new/);
   assert.match(workflow, /PrivacyInfo\.xcprivacy/);
   assert.match(workflow, /plutil -lint/);
+  assert.match(workflow, /-configuration Release/);
+  assert.match(workflow, /CFBundleShortVersionString/);
+  assert.match(workflow, /MinimumOSVersion/);
 });

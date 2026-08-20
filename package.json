@@ -8,6 +8,7 @@
     "test": "node --test tests/*.test.mjs",
     "build:site": "node scripts/build-site.mjs",
     "build:mobile": "node scripts/build-mobile.mjs",
+    "ios:release:check": "node scripts/validate-ios-release.mjs",
     "ios:add": "npm run build:mobile && cap add ios && npm run ios:assets",
     "ios:assets": "node scripts/configure-ios-assets.mjs",
     "ios:prepare": "npm run build:mobile && cap sync ios && npm run ios:assets",

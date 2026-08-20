@@ -15,8 +15,10 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - 'capacitor.config.json'
+      - 'ios-release.json'
       - 'scripts/build-mobile.mjs'
       - 'scripts/configure-ios-assets.mjs'
+      - 'scripts/validate-ios-release.mjs'
       - '.github/workflows/ios-native-ci.yml'
   push:
     branches: [main]
@@ -32,8 +34,10 @@ on:
       - 'package.json'
       - 'package-lock.json'
       - 'capacitor.config.json'
+      - 'ios-release.json'
       - 'scripts/build-mobile.mjs'
       - 'scripts/configure-ios-assets.mjs'
+      - 'scripts/validate-ios-release.mjs'
       - '.github/workflows/ios-native-ci.yml'
 
 permissions:
@@ -64,6 +68,8 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: Run complete test suite
         run: npm test
+      - name: Validate App Store release identity
+        run: npm run ios:release:check
       - name: Build bundled web assets
         run: npm run build:mobile
       - name: Generate native iOS project
@@ -72,28 +78,41 @@ jobs:
         run: npm run ios:assets
       - name: Validate Capacitor configuration
         run: npx cap doctor ios
-      - name: Compile for iOS Simulator without signing
+      - name: Compile Release for iOS Simulator without signing
         shell: bash
         run: |
           set -euo pipefail
           xcodebuild \
             -project ios/App/App.xcodeproj \
             -scheme App \
-            -configuration Debug \
+            -configuration Release \
             -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO \
             build
-      - name: Validate application identity and privacy
+      - name: Validate release identity, version and privacy
         id: app
         shell: bash
         run: |
           set -euo pipefail
-          APP_PATH="$(find "$HOME/Library/Developer/Xcode/DerivedData" -path '*Build/Products/Debug-iphonesimulator/App.app' -print -quit)"
+          APP_PATH="$(find "$HOME/Library/Developer/Xcode/DerivedData" -path '*Build/Products/Release-iphonesimulator/App.app' -print -quit)"
           test -n "$APP_PATH"
           PLIST="$APP_PATH/Info.plist"
           PRIVACY="$APP_PATH/PrivacyInfo.xcprivacy"
+          EXPECTED_BUNDLE_ID="$(node -p "require('./ios-release.json').bundleId")"
+          EXPECTED_DISPLAY_NAME="$(node -p "require('./ios-release.json').displayName")"
+          EXPECTED_VERSION="$(node -p "require('./ios-release.json').marketingVersion")"
+          EXPECTED_BUILD="$(node -p "require('./ios-release.json').buildNumber")"
+          EXPECTED_MINIMUM_IOS="$(node -p "require('./ios-release.json').minimumIOSVersion")"
           BUNDLE_ID="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$PLIST")"
-          test "$BUNDLE_ID" = 'com.agusgonbel.photomosaic'
+          DISPLAY_NAME="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleDisplayName' "$PLIST")"
+          VERSION="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$PLIST")"
+          BUILD="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$PLIST")"
+          MINIMUM_IOS="$(/usr/libexec/PlistBuddy -c 'Print :MinimumOSVersion' "$PLIST")"
+          test "$BUNDLE_ID" = "$EXPECTED_BUNDLE_ID"
+          test "$DISPLAY_NAME" = "$EXPECTED_DISPLAY_NAME"
+          test "$VERSION" = "$EXPECTED_VERSION"
+          test "$BUILD" = "$EXPECTED_BUILD"
+          test "$MINIMUM_IOS" = "$EXPECTED_MINIMUM_IOS"
           test -f "$APP_PATH/public/privacy.html"
           test -f "$APP_PATH/public/support.html"
           test -f "$PRIVACY"
@@ -101,6 +120,7 @@ jobs:
           test "$(plutil -extract NSPrivacyTracking raw -o - "$PRIVACY")" = 'false'
           test "$(plutil -extract NSPrivacyCollectedDataTypes json -o - "$PRIVACY")" = '[]'
           echo "Bundle ID: $BUNDLE_ID"
+          echo "Release: $DISPLAY_NAME $VERSION ($BUILD), iOS $MINIMUM_IOS+"
           echo "Privacy manifest: valid"
           echo "path=$APP_PATH" >> "$GITHUB_OUTPUT"
       - name: Stage simulator artifact

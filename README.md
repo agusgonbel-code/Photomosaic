@@ -32,7 +32,9 @@ Al fusionar el PR en `main`, GitHub Actions construye un paquete mínimo y lo de
 Abre la URL publicada en Safari > Compartir > Añadir a pantalla de inicio.
 
 ## Preparar la versión nativa de iPhone
-Con Node.js 22 o posterior: `npm install`, `npm run ios:add` y `npm run ios:open`. La rama se valida también en macOS con Xcode, instala el icono nativo de PhotoMosaic y conserva el identificador `com.agusgonbel.photomosaic`; la firma, el equipo de Apple Developer y la subida a TestFlight se configuran únicamente al preparar la distribución.
+Con Node.js 22 o posterior: `npm install`, `npm run ios:release:check`, `npm run ios:add` y `npm run ios:open`. La rama se valida también en macOS con Xcode, instala el icono nativo de PhotoMosaic y conserva el identificador `com.agusgonbel.photomosaic`; la firma, el equipo de Apple Developer y la subida a TestFlight se configuran únicamente al preparar la distribución.
+
+La identidad de cada entrega se controla desde `ios-release.json`. La primera versión está fijada como `1.0.0` (build `1`) para iOS 15 o posterior. La CI genera una compilación `Release` y abre su `Info.plist` para comprobar nombre, identificador, versión, build y sistema mínimo antes de conservar el artefacto.
 
 ## Privacidad y ficha de App Store
 - Política pública: `https://agusgonbel-code.github.io/Photomosaic/privacy.html`.
@@ -42,4 +44,3 @@ Con Node.js 22 o posterior: `npm install`, `npm run ios:add` y `npm run ios:open
 - Antes de cada distribución, GitHub Actions valida el manifiesto, las páginas legales y su presencia dentro de `PhotoMosaic.app`.
 
 La declaración final de privacidad en App Store Connect debe revisarse de nuevo si se incorporan servicios externos, analítica, publicidad o procesamiento remoto.
-

@@ -17,8 +17,10 @@ const iconDestination = path.join(
 const privacySource = path.join(root, 'PrivacyInfo.xcprivacy');
 const privacyDestination = path.join(root, 'ios', 'App', 'App', 'PrivacyInfo.xcprivacy');
 const projectPath = path.join(root, 'ios', 'App', 'App.xcodeproj', 'project.pbxproj');
+const infoPath = path.join(root, 'ios', 'App', 'App', 'Info.plist');
+const releaseConfigPath = path.join(root, 'ios-release.json');
 
-for (const file of [iconDestination, projectPath]) {
+for (const file of [iconDestination, projectPath, infoPath]) {
   await stat(file).catch(() => {
     throw new Error('No existe el proyecto iOS. Ejecuta primero `npx cap add ios`.');
   });
@@ -26,6 +28,17 @@ for (const file of [iconDestination, projectPath]) {
 await stat(privacySource).catch(() => {
   throw new Error('Falta PrivacyInfo.xcprivacy en la raíz del proyecto.');
 });
+
+const release = JSON.parse(await readFile(releaseConfigPath, 'utf8'));
+if (!/^\d+\.\d+\.\d+$/.test(release.marketingVersion)) {
+  throw new Error('marketingVersion debe tener el formato X.Y.Z.');
+}
+if (!Number.isInteger(release.buildNumber) || release.buildNumber < 1) {
+  throw new Error('buildNumber debe ser un entero positivo.');
+}
+if (!/^\d+\.\d+$/.test(release.minimumIOSVersion)) {
+  throw new Error('minimumIOSVersion debe tener el formato X.Y.');
+}
 
 await promisify(execFile)('sips', ['-z', '1024', '1024', iconSource, '--out', iconDestination]);
 await copyFile(privacySource, privacyDestination);
@@ -58,5 +71,28 @@ if (!project.includes(resourceLine.trim())) {
   project = project.replace(resources, `$1${resourceLine}`);
 }
 
+const replaceBuildSetting = (source, key, value) => {
+  const expression = new RegExp(`(${key} = )[^;]+;`, 'g');
+  if (!expression.test(source)) throw new Error(`No se encontró ${key} en el proyecto Xcode.`);
+  return source.replace(expression, `$1${value};`);
+};
+
+project = replaceBuildSetting(project, 'MARKETING_VERSION', release.marketingVersion);
+project = replaceBuildSetting(project, 'CURRENT_PROJECT_VERSION', String(release.buildNumber));
+project = replaceBuildSetting(project, 'IPHONEOS_DEPLOYMENT_TARGET', release.minimumIOSVersion);
+
 await writeFile(projectPath, project, 'utf8');
-console.log('Icono y manifiesto de privacidad instalados en el proyecto iOS.');
+
+let info = await readFile(infoPath, 'utf8');
+const setPlistString = (source, key, value) => {
+  const expression = new RegExp(`(<key>${key}</key>\\s*<string>)[^<]*(</string>)`);
+  if (!expression.test(source)) throw new Error(`No se encontró ${key} en Info.plist.`);
+  return source.replace(expression, `$1${value}$2`);
+};
+
+info = setPlistString(info, 'CFBundleDisplayName', release.displayName);
+info = setPlistString(info, 'CFBundleShortVersionString', '$(MARKETING_VERSION)');
+info = setPlistString(info, 'CFBundleVersion', '$(CURRENT_PROJECT_VERSION)');
+await writeFile(infoPath, info, 'utf8');
+
+console.log(`Recursos iOS listos: ${release.displayName} ${release.marketingVersion} (${release.buildNumber}).`);
