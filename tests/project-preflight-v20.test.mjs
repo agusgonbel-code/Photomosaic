@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRequire} from 'node:module';const require=createRequire(import.meta.url);const e=require('../project-preflight-v20.js');
+const tiles=Array.from({length:12},(_,i)=>({name:`p${i}.jpg`,size:1000000+i,width:1600,height:1200,fingerprint:`${i}`}));
+test('mosaic blocks without target',()=>{const r=e.assessProject({mode:'mosaic',tiles});assert.equal(r.status,'blocked');assert.ok(r.blockers.some(x=>x.includes('foto principal')));});
+test('shape estimates print dpi',()=>{assert.equal(e.dpi({width:1200,height:1800},10,15),305);const r=e.assessProject({mode:'shape',tiles,photoWidthCm:10,photoHeightCm:15});assert.equal(r.blockers.length,0);assert.equal(r.printRisk,0);});
+test('detects duplicate fingerprints and low resolution',()=>{const list=[...tiles,{...tiles[0]},{name:'tiny.jpg',size:9,width:200,height:300,fingerprint:'tiny'}];const r=e.assessProject({mode:'shape',tiles:list,photoWidthCm:10,photoHeightCm:15});assert.ok(r.duplicates>=1);assert.ok(r.lowResolution>=1);assert.ok(r.warnings.length>0);});
