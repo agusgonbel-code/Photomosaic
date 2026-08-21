@@ -4,7 +4,7 @@ import path from 'node:path';
 const root = path.resolve(import.meta.dirname, '..');
 const dist = path.join(root, 'dist');
 const publicFiles = [
-  'index.html', 'studio.html', 'studio-mode.js', 'privacy.html', 'support.html', 'styles.css', 'custom-shape.css', 'app.js', 'selection-controls.js', 'mosaic-engine.js', 'shape-engine.js', 'custom-shape-ui.js', 'generation-controller.js',
+  'index.html', 'studio.html', 'studio-mode.js', 'project-preflight-v20.js', 'studio-preflight-ui.js', 'privacy.html', 'support.html', 'styles.css', 'custom-shape.css', 'app.js', 'selection-controls.js', 'mosaic-engine.js', 'shape-engine.js', 'custom-shape-ui.js', 'generation-controller.js',
   'service-worker.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'
 ];
 
@@ -25,7 +25,7 @@ const manifest = JSON.parse(await readFile(path.join(dist, 'manifest.webmanifest
 for (const required of ['studio.html?mode=rectangle', 'studio.html?mode=shape', 'privacy.html', 'support.html']) {
   if (!index.includes(required)) throw new Error(`index.html no referencia ${required}`);
 }
-for (const required of ['app.js', 'studio-mode.js', 'selection-controls.js', 'mosaic-engine.js', 'shape-engine.js', 'custom-shape-ui.js', 'generation-controller.js', 'styles.css', 'custom-shape.css', 'manifest.webmanifest']) {
+for (const required of ['app.js', 'studio-mode.js', 'project-preflight-v20.js', 'studio-preflight-ui.js', 'selection-controls.js', 'mosaic-engine.js', 'shape-engine.js', 'custom-shape-ui.js', 'generation-controller.js', 'styles.css', 'custom-shape.css', 'manifest.webmanifest']) {
   if (!studio.includes(required)) throw new Error(`studio.html no referencia ${required}`);
 }
 for (const required of publicFiles.filter(file => file !== 'service-worker.js')) {
