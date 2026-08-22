@@ -6,7 +6,7 @@ const destination = path.join(root, 'www');
 const files = [
   'index.html', 'studio.html', 'privacy.html', 'support.html', 'styles.css', 'custom-shape.css',
   'app.js', 'selection-controls.js', 'studio-mode.js', 'project-preflight-v20.js', 'studio-preflight-ui.js',
-  'wall-fit-v21.js', 'wall-preview-v22.js',
+  'wall-fit-v21.js', 'wall-preview-v22.js', 'wall-project-v30.js',
   'mosaic-engine.js', 'shape-engine.js', 'custom-shape-ui.js', 'generation-controller.js',
   'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'
 ];
