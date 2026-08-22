@@ -1,4 +1,4 @@
-const CACHE_NAME='photomosaic-v22-wall-simulator';
+const CACHE_NAME='photomosaic-v23-native-complete-integrity';
 const APP_SHELL=['./','./index.html','./studio.html','./studio-mode.js','./project-preflight-v20.js','./studio-preflight-ui.js','./wall-fit-v21.js','./wall-preview-v22.js','./privacy.html','./support.html','./styles.css','./custom-shape.css','./mosaic-engine.js','./shape-engine.js','./custom-shape-ui.js','./generation-controller.js','./app.js','./selection-controls.js','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
