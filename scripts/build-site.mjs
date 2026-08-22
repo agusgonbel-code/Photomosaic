@@ -4,7 +4,7 @@ import path from 'node:path';
 const root = path.resolve(import.meta.dirname, '..');
 const dist = path.join(root, 'dist');
 const publicFiles = [
-  'index.html', 'studio.html', 'studio-mode.js', 'project-preflight-v20.js', 'studio-preflight-ui.js', 'privacy.html', 'support.html', 'styles.css', 'custom-shape.css', 'app.js', 'selection-controls.js', 'mosaic-engine.js', 'shape-engine.js', 'custom-shape-ui.js', 'generation-controller.js',
+  'index.html', 'studio.html', 'studio-mode.js', 'project-preflight-v20.js', 'studio-preflight-ui.js', 'wall-fit-v21.js', 'wall-preview-v22.js', 'privacy.html', 'support.html', 'styles.css', 'custom-shape.css', 'app.js', 'selection-controls.js', 'mosaic-engine.js', 'shape-engine.js', 'custom-shape-ui.js', 'generation-controller.js',
   'service-worker.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'
 ];
 
