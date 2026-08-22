@@ -28,6 +28,13 @@ test('shape route hides target photo and mosaic-only controls while mosaic resto
 
 test('shape exports use a product-specific filename while mosaics keep existing names',()=>{
   assert.match(source,/replace\(\/\^photomosaic-\/,'forma-pared-'\)/);
-  assert.match(source,/if\(mode!=='shape'\)return base/);
+  assert.match(source,/mode==='shape'/);
   assert.match(source,/__modeFilenameV24/);
+});
+
+test('non-cancelled iOS share failures fall back to a local file download',()=>{
+  assert.match(source,/error\?\.name==='AbortError'/);
+  assert.match(source,/downloadFile\(file\)/);
+  assert.match(source,/__photomosaicShareV25/);
+  assert.match(source,/Object\.defineProperty\(navigator,'share'/);
 });
