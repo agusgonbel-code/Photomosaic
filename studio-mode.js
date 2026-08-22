@@ -15,12 +15,16 @@ const applyMode=()=>{
 function installModeExportName(){
   const engine=globalThis.PhotoMosaicEngine;if(!engine||engine.__modeFilenameV24)return;
   const original=engine.exportFilename?.bind(engine);if(typeof original!=='function')return;
-  engine.exportFilename=(format='jpeg',date=new Date())=>{
-    const base=original(format,date);if(mode!=='shape')return base;
-    return base.replace(/^photomosaic-/,'forma-pared-');
-  };
+  engine.exportFilename=(format='jpeg',date=new Date())=>{const base=original(format,date);return mode==='shape'?base.replace(/^photomosaic-/,'forma-pared-'):base;};
   engine.__modeFilenameV24=true;
 }
-applyMode();installModeExportName();
+function downloadFile(file){const u=URL.createObjectURL(file),a=document.createElement('a');a.href=u;a.download=file.name||'photomosaic';a.style.display='none';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),30000);}
+function installShareFallback(){
+  if(!navigator.share||navigator.__photomosaicShareV25)return;
+  const nativeShare=navigator.share.bind(navigator);
+  const safeShare=async data=>{try{return await nativeShare(data);}catch(error){if(error?.name==='AbortError')throw error;const file=data?.files?.[0];if(file){downloadFile(file);return;}throw error;}};
+  try{Object.defineProperty(navigator,'share',{configurable:true,value:safeShare});Object.defineProperty(navigator,'__photomosaicShareV25',{configurable:true,value:true});}catch{}
+}
+applyMode();installModeExportName();installShareFallback();
 if(select){select.value=mode;select.dispatchEvent(new Event('change'));select.addEventListener('change',()=>{if(select.value===mode)return;select.value=mode;applyMode();select.dispatchEvent(new Event('change'));});}
 })();
