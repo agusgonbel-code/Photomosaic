@@ -21,4 +21,4 @@ jobs:
       - name: Start app
         run: python3 -m http.server 4173 >/tmp/photomosaic-http.log 2>&1 &
       - name: Run split-flow and mobile viewport gates
-        run: npx playwright test qa/split-flows.spec.js qa/mobile-layout.spec.js --reporter=line
+        run: npx playwright test qa/split-flows.spec.js qa/mobile-layout.spec.js qa/wall-project-v30.spec.js --reporter=line
