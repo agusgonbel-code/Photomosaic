@@ -25,3 +25,9 @@ test('shape route hides target photo and mosaic-only controls while mosaic resto
   assert.match(source,/if\(target\)target\.hidden=false/);
   assert.match(source,/if\(mosaic\)mosaic\.hidden=false/);
 });
+
+test('shape exports use a product-specific filename while mosaics keep existing names',()=>{
+  assert.match(source,/replace\(\/\^photomosaic-\/,'forma-pared-'\)/);
+  assert.match(source,/if\(mode!=='shape'\)return base/);
+  assert.match(source,/__modeFilenameV24/);
+});
