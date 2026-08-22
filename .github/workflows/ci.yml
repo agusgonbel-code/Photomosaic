@@ -20,6 +20,7 @@ jobs:
       - name: Validate JavaScript
         run: |
           node --check app.js
+          node --check studio-mode.js
           node --check selection-controls.js
           node --check mosaic-engine.js
           node --check shape-engine.js
@@ -42,6 +43,8 @@ jobs:
         shell: bash
         run: |
           test -s dist/index.html
+          test -s dist/studio.html
+          test -s dist/studio-mode.js
           test -s dist/app.js
           test -s dist/selection-controls.js
           test -s dist/mosaic-engine.js
@@ -55,6 +58,7 @@ jobs:
           test ! -e dist/tests
           test ! -e dist/.github
           cmp --silent index.html dist/index.html
+          cmp --silent studio.html dist/studio.html
           cmp --silent app.js dist/app.js
           cmp --silent selection-controls.js dist/selection-controls.js
       - name: Validate manifest
@@ -63,6 +67,8 @@ jobs:
         shell: bash
         run: |
           test -s index.html
+          test -s studio.html
+          test -s studio-mode.js
           test -s styles.css
           test -s app.js
           test -s selection-controls.js
@@ -75,29 +81,34 @@ jobs:
           test -s manifest.webmanifest
           test -s icons/icon-192.png
           test -s icons/icon-512.png
-          grep -q 'id="target"' index.html
-          grep -q 'id="tiles"' index.html
-          grep -q 'id="cancel"' index.html
-          grep -q 'multiple' index.html
+          grep -q 'studio.html?mode=rectangle' index.html
+          grep -q 'studio.html?mode=shape' index.html
+          grep -q 'id="target"' studio.html
+          grep -q 'id="tiles"' studio.html
+          grep -q 'id="cancel"' studio.html
+          grep -q 'multiple' studio.html
           grep -q 'navigator.canShare' app.js
-          grep -q 'selection-controls.js' index.html
+          grep -q 'selection-controls.js' studio.html
+          grep -q 'studio-mode.js' studio.html
           grep -q 'trimSelection' shape-engine.js
           grep -q 'const neighbours' shape-engine.js
-          grep -q 'Contorno para pared' index.html
+          grep -q 'Forma para pared' index.html
           grep -q 'customMissing' app.js
           grep -q "butterfly: { label: 'Mariposa'" shape-engine.js
-          grep -q 'value="clover"' index.html
-          grep -q 'id="downloadCsv"' index.html
+          grep -q 'value="clover"' studio.html
+          grep -q 'id="downloadCsv"' studio.html
           grep -q 'installationGuideSvg' shape-engine.js
           grep -q 'shape-trim' selection-controls.js
           grep -q "'./selection-controls.js'" service-worker.js
-          grep -q 'id="exportFormat"' index.html
-          grep -q 'id="mosaicMode"' index.html
-          grep -q 'id="shape"' index.html
-          grep -q 'shape-engine.js' index.html
-          grep -q 'custom-shape-ui.js' index.html
+          grep -q 'id="exportFormat"' studio.html
+          grep -q 'id="mosaicMode"' studio.html
+          grep -q 'id="shape"' studio.html
+          grep -q 'shape-engine.js' studio.html
+          grep -q 'custom-shape-ui.js' studio.html
+          grep -q "'./studio.html'" service-worker.js
+          grep -q "'./studio-mode.js'" service-worker.js
           grep -q "'./shape-engine.js'" service-worker.js
           grep -q "'./custom-shape-ui.js'" service-worker.js
           grep -q "image/png" mosaic-engine.js
-          grep -q 'generation-controller.js' index.html
+          grep -q 'generation-controller.js' studio.html
           grep -q "'./generation-controller.js'" service-worker.js

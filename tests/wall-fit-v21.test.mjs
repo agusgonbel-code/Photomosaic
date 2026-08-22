@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRequire} from 'node:module';const require=createRequire(import.meta.url);const e=require('../wall-fit-v21.js');
+test('design fits inside usable wall',()=>{const r=e.assess({widthCm:120,heightCm:80},{widthCm:200,heightCm:150,marginCm:10});assert.equal(r.fits,true);assert.ok(r.leftCm>0);});
+test('oversized design reports overflow and scale',()=>{const r=e.assess({widthCm:220,heightCm:160},{widthCm:200,heightCm:150,marginCm:10});assert.equal(r.fits,false);assert.ok(r.overflowWidthCm>0);assert.ok(r.scaleToFit<1);});

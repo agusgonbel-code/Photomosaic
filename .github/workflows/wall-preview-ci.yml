@@ -1,0 +1,24 @@
+name: PhotoMosaic Wall Simulator QA
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  wall-simulator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --check wall-fit-v21.js
+      - run: node --check wall-preview-v22.js
+      - run: node --test tests/wall-fit-v21.test.mjs tests/wall-preview-v22.test.mjs
+      - run: node scripts/build-site.mjs
+      - run: |
+          test -s dist/wall-fit-v21.js
+          test -s dist/wall-preview-v22.js
+          grep -q "wall-preview-v22.js" dist/service-worker.js

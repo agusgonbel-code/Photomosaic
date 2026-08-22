@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRequire} from 'node:module';const require=createRequire(import.meta.url);const W=require('../wall-preview-v22.js');
+test('contain keeps aspect ratio and centers',()=>{const r=W.contain(1000,500,800,800);assert.equal(r.width,800);assert.equal(r.height,400);assert.equal(r.left,0);assert.equal(r.top,200);});
+test('placement is bounded within wall',()=>{const p=W.placement({wallWidthPx:1200,wallHeightPx:900,designWidthPx:800,designHeightPx:600,scale:.6,x:1,y:1,opacity:.9});assert.ok(p.x>=0&&p.y>=0);assert.ok(p.x+p.width<=1200.0001);assert.ok(p.y+p.height<=900.0001);assert.equal(p.opacity,.9);});
+test('invalid dimensions fail safely',()=>assert.throws(()=>W.placement({wallWidthPx:0,wallHeightPx:900,designWidthPx:10,designHeightPx:10})));
