@@ -4,7 +4,9 @@ import path from 'node:path';
 const root = path.resolve(import.meta.dirname, '..');
 const destination = path.join(root, 'www');
 const files = [
-  'index.html', 'privacy.html', 'support.html', 'styles.css', 'custom-shape.css', 'app.js', 'selection-controls.js',
+  'index.html', 'studio.html', 'privacy.html', 'support.html', 'styles.css', 'custom-shape.css',
+  'app.js', 'selection-controls.js', 'studio-mode.js', 'project-preflight-v20.js', 'studio-preflight-ui.js',
+  'wall-fit-v21.js', 'wall-preview-v22.js',
   'mosaic-engine.js', 'shape-engine.js', 'custom-shape-ui.js', 'generation-controller.js',
   'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'
 ];
