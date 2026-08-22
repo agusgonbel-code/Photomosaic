@@ -3,6 +3,8 @@
   const shapeInfo=document.querySelector('#shapeInfo');
   const mode=document.querySelector('#mosaicMode');
   const shape=document.querySelector('#shape');
+  const result=document.querySelector('#result');
+  const again=document.querySelector('#again');
   const shapeApi=window.PhotoMosaicShapes;
   if(!strip||!shapeInfo||!mode||!shape)return;
 
@@ -14,6 +16,7 @@
     #strip .tile-remove:active{transform:scale(.94)}
     .shape-adjustment{display:block;margin-top:7px;font-weight:800;color:#1d4ed8}
     .shape-trim{display:block;width:100%;margin-top:10px;padding:10px 12px;min-height:44px;background:#1d4ed8;color:#fff}
+    .result-integrity-note{margin:10px 0 0;padding:10px 12px;border-radius:14px;background:#ecfdf5;color:#166534;font-size:13px;line-height:1.4}
   `;
   document.head.append(style);
 
@@ -95,6 +98,35 @@
 
   mode.addEventListener('change',()=>queueMicrotask(refreshShapeHint));
   shape.addEventListener('change',()=>queueMicrotask(refreshShapeHint));
+
+  // Mantiene sincronizados imagen, plano y CSV. Una vez generado un resultado,
+  // la selección y las medidas quedan congeladas hasta pulsar "Crear otro".
+  let locked=false;
+  const previousDisabled=new Map();
+  const sourceControls=()=>[...document.querySelectorAll('#targetSection input,#targetSection button,#tilesSection input,#tilesSection button,#settingsSection input,#settingsSection select,#settingsSection button,#generate,.tile-remove,.shape-trim')];
+  function lockResultInputs(){
+    if(locked||!result||result.classList.contains('hidden'))return;
+    locked=true;
+    previousDisabled.clear();
+    sourceControls().forEach(control=>{previousDisabled.set(control,Boolean(control.disabled));control.disabled=true;});
+    if(!result.querySelector('.result-integrity-note')){
+      const note=document.createElement('p');
+      note.className='result-integrity-note';
+      note.textContent='Resultado protegido: las fotos y medidas quedan bloqueadas para que la imagen, el plano numerado y el CSV sigan coincidiendo. Pulsa “Crear otro” para volver a editar.';
+      result.querySelector('h2')?.insertAdjacentElement('afterend',note);
+    }
+  }
+  function unlockResultInputs(){
+    if(!locked)return;
+    locked=false;
+    previousDisabled.forEach((disabled,control)=>{if(control?.isConnected)control.disabled=disabled;});
+    previousDisabled.clear();
+    queueMicrotask(()=>{try{updateShape();}catch{}});
+  }
+  if(result){
+    new MutationObserver(()=>{if(!result.classList.contains('hidden'))setTimeout(lockResultInputs,0);}).observe(result,{attributes:true,attributeFilter:['class']});
+  }
+  again?.addEventListener('click',()=>setTimeout(unlockResultInputs,0));
 
   syncSelectionControls();
 })();
