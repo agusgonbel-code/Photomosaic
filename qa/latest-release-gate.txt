@@ -1,8 +1,8 @@
 PHOTOMOSAIC FAST RELEASE GATE
-SOURCE_COMMIT: 8a670c3219b7604763357374290db3540c16eecc
+SOURCE_COMMIT: 5a11c797aadefa5239140834af0f2db11d74ef66
 RESULT: PASS
 EXIT_CODE: 0
-UTC: 2026-08-23T15:45:24Z
+UTC: 2026-08-23T15:46:18Z
 COVERAGE: browser + split flows + 320/375/390/430 mobile + wall project + accessibility
 --- TEST OUTPUT (tail) ---
 
@@ -17,27 +17,27 @@ Running 32 tests using 2 workers
 [7/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 375px
 [8/32] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 430px
 [9/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 375px
-[10/32] qa/accessibility.spec.js:34:1 › PhotoMosaic CSS exposes focus indication and reduced motion
-[11/32] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 390px
+[10/32] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 390px
+[11/32] qa/accessibility.spec.js:34:1 › PhotoMosaic CSS exposes focus indication and reduced motion
 [12/32] qa/split-flows.spec.js:3:1 › launcher exposes two independent creation modes
 [13/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 390px
 [14/32] qa/split-flows.spec.js:5:1 › classic mosaic shows only the classic workflow
-[15/32] qa/split-flows.spec.js:7:1 › wall shape hides mosaic-only controls and activates physical planning
-[16/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 390px
-[17/32] qa/split-flows.spec.js:9:1 › generated result freezes source controls until creating another design
-[18/32] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 430px
-[19/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 430px
-[20/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 430px
-[21/32] qa/wall-project-v30.spec.js:3:1 › wall project runtime is active in shape studio
-[22/32] qa/mobile-layout.spec.js:9:3 › PhotoMosaic launcher fits iPhone landscape
-[23/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic rectangle studio fits iPhone landscape
-[24/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic shape studio fits iPhone landscape
-[25/32] qa/wall-project-v30.spec.js:4:1 › wall project rejects invalid coordinates instead of exporting NaN geometry
-[26/32] qa/mobile-layout.spec.js:9:3 › PhotoMosaic launcher fits iPad portrait
-[27/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic rectangle studio fits iPad portrait
-[28/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic shape studio fits iPad portrait
+[15/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 390px
+[16/32] qa/split-flows.spec.js:7:1 › wall shape hides mosaic-only controls and activates physical planning
+[17/32] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 430px
+[18/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 430px
+[19/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 430px
+[20/32] qa/mobile-layout.spec.js:9:3 › PhotoMosaic launcher fits iPhone landscape
+[21/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic rectangle studio fits iPhone landscape
+[22/32] qa/split-flows.spec.js:9:1 › generated result freezes source controls until creating another design
+[23/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic shape studio fits iPhone landscape
+[24/32] qa/mobile-layout.spec.js:9:3 › PhotoMosaic launcher fits iPad portrait
+[25/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic rectangle studio fits iPad portrait
+[26/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic shape studio fits iPad portrait
+[27/32] qa/wall-project-v30.spec.js:3:1 › wall project runtime is active in shape studio
+[28/32] qa/wall-project-v30.spec.js:4:1 › wall project rejects invalid coordinates instead of exporting NaN geometry
 [29/32] qa/mobile-layout.spec.js:9:3 › PhotoMosaic launcher fits iPad landscape
 [30/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic rectangle studio fits iPad landscape
 [31/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic shape studio fits iPad landscape
 [32/32] qa/mobile-layout.spec.js:12:1 › PhotoMosaic stylesheet enforces safe-area and overflow protection
-  32 passed (9.5s)
+  32 passed (9.8s)
