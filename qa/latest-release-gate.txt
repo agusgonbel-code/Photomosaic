@@ -1,43 +1,72 @@
 PHOTOMOSAIC FAST RELEASE GATE
-SOURCE_COMMIT: 83ee0211b9ff67cd9e8b1def4107bc1e30da61b4
+SOURCE_COMMIT: 1dedf942b64256ff8fa83bb496bedb342983d667
 RESULT: PASS
 EXIT_CODE: 0
-UTC: 2026-08-23T18:46:53Z
-COVERAGE: browser + split flows + 320/375/390/430 mobile + wall project + accessibility
+UTC: 2026-08-23T18:58:39Z
+COVERAGE: browser + split flows + 320/375/390/430 mobile + wall project + accessibility + 28 user-behavior scenarios
 --- TEST OUTPUT (tail) ---
 
-Running 32 tests using 2 workers
+Running 61 tests using 2 workers
 
-[1/32] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 320px
-[2/32] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 320px
-[3/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 320px
-[4/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 320px
-[5/32] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 390px
-[6/32] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 375px
-[7/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 375px
-[8/32] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 430px
-[9/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 375px
-[10/32] qa/accessibility.spec.js:34:1 › PhotoMosaic CSS exposes focus indication and reduced motion
-[11/32] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 390px
-[12/32] qa/split-flows.spec.js:3:1 › launcher exposes two independent creation modes
-[13/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 390px
-[14/32] qa/split-flows.spec.js:5:1 › classic mosaic shows only the classic workflow
-[15/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 390px
-[16/32] qa/split-flows.spec.js:7:1 › wall shape hides mosaic-only controls and activates physical planning
-[17/32] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 430px
-[18/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 430px
-[19/32] qa/split-flows.spec.js:9:1 › generated result freezes source controls until creating another design
-[20/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 430px
-[21/32] qa/mobile-layout.spec.js:9:3 › PhotoMosaic launcher fits iPhone landscape
-[22/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic rectangle studio fits iPhone landscape
-[23/32] qa/wall-project-v30.spec.js:3:1 › wall project runtime is active in shape studio
-[24/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic shape studio fits iPhone landscape
-[25/32] qa/wall-project-v30.spec.js:4:1 › wall project rejects invalid coordinates instead of exporting NaN geometry
-[26/32] qa/mobile-layout.spec.js:9:3 › PhotoMosaic launcher fits iPad portrait
-[27/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic rectangle studio fits iPad portrait
-[28/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic shape studio fits iPad portrait
-[29/32] qa/mobile-layout.spec.js:9:3 › PhotoMosaic launcher fits iPad landscape
-[30/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic rectangle studio fits iPad landscape
-[31/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic shape studio fits iPad landscape
-[32/32] qa/mobile-layout.spec.js:12:1 › PhotoMosaic stylesheet enforces safe-area and overflow protection
-  32 passed (9.5s)
+[1/61] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 320px
+[2/61] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 320px
+[3/61] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 320px
+[4/61] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 320px
+[5/61] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 390px
+[6/61] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 375px
+[7/61] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 375px
+[8/61] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 430px
+[9/61] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 375px
+[10/61] qa/accessibility.spec.js:34:1 › PhotoMosaic CSS exposes focus indication and reduced motion
+[11/61] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 390px
+[12/61] qa/split-flows.spec.js:3:1 › launcher exposes two independent creation modes
+[13/61] qa/split-flows.spec.js:5:1 › classic mosaic shows only the classic workflow
+[14/61] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 390px
+[15/61] qa/split-flows.spec.js:7:1 › wall shape hides mosaic-only controls and activates physical planning
+[16/61] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 390px
+[17/61] qa/split-flows.spec.js:9:1 › generated result freezes source controls until creating another design
+[18/61] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 430px
+[19/61] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 430px
+[20/61] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 430px
+[21/61] qa/user-100-sim.spec.js:6:1 › usuario entiende que existen dos productos
+[22/61] qa/user-100-sim.spec.js:7:1 › usuario entra en Mosaico desde inicio
+[23/61] qa/mobile-layout.spec.js:9:3 › PhotoMosaic launcher fits iPhone landscape
+[24/61] qa/mobile-layout.spec.js:10:43 › PhotoMosaic rectangle studio fits iPhone landscape
+[25/61] qa/user-100-sim.spec.js:8:1 › usuario entra en Forma desde inicio
+[26/61] qa/mobile-layout.spec.js:10:43 › PhotoMosaic shape studio fits iPhone landscape
+[27/61] qa/user-100-sim.spec.js:9:38 › inicio cabe a 320px
+[28/61] qa/mobile-layout.spec.js:9:3 › PhotoMosaic launcher fits iPad portrait
+[29/61] qa/user-100-sim.spec.js:9:38 › inicio cabe a 375px
+[30/61] qa/mobile-layout.spec.js:10:43 › PhotoMosaic rectangle studio fits iPad portrait
+[31/61] qa/user-100-sim.spec.js:9:38 › inicio cabe a 390px
+[32/61] qa/user-100-sim.spec.js:9:38 › inicio cabe a 430px
+[33/61] qa/mobile-layout.spec.js:10:43 › PhotoMosaic shape studio fits iPad portrait
+[34/61] qa/user-100-sim.spec.js:10:41 › rectangle muestra flujo de fotos y ajustes
+[35/61] qa/user-100-sim.spec.js:10:41 › shape muestra flujo de fotos y ajustes
+[36/61] qa/mobile-layout.spec.js:9:3 › PhotoMosaic launcher fits iPad landscape
+[37/61] qa/mobile-layout.spec.js:10:43 › PhotoMosaic rectangle studio fits iPad landscape
+[38/61] qa/user-100-sim.spec.js:11:1 › Mosaico muestra foto principal
+[39/61] qa/mobile-layout.spec.js:10:43 › PhotoMosaic shape studio fits iPad landscape
+[40/61] qa/user-100-sim.spec.js:12:1 › Forma oculta foto principal
+[41/61] qa/user-100-sim.spec.js:13:1 › Forma muestra controles de silueta
+[42/61] qa/mobile-layout.spec.js:12:1 › PhotoMosaic stylesheet enforces safe-area and overflow protection
+[43/61] qa/wall-project-v30.spec.js:3:1 › wall project runtime is active in shape studio
+[44/61] qa/user-100-sim.spec.js:14:1 › Mosaico muestra controles de columnas
+[45/61] qa/wall-project-v30.spec.js:4:1 › wall project rejects invalid coordinates instead of exporting NaN geometry
+[46/61] qa/user-100-sim.spec.js:15:1 › usuario cambia resolución
+[47/61] qa/user-100-sim.spec.js:16:1 › usuario cambia formato a PNG
+[48/61] qa/user-100-sim.spec.js:17:1 › usuario cambia variedad del mosaico
+[49/61] qa/user-100-sim.spec.js:18:1 › usuario configura medidas físicas de forma
+[50/61] qa/user-100-sim.spec.js:19:1 › usuario elige corazón
+[51/61] qa/user-100-sim.spec.js:20:1 › usuario elige forma personalizada
+[52/61] qa/user-100-sim.spec.js:21:1 › botón crear permanece bloqueado sin fotos
+[53/61] qa/user-100-sim.spec.js:22:1 › contador de fotos anuncia estado
+[54/61] qa/user-100-sim.spec.js:23:1 › resultado canvas tiene nombre accesible
+[55/61] qa/user-100-sim.spec.js:24:1 › usuario vuelve a elegir modo
+[56/61] qa/user-100-sim.spec.js:25:1 › usuario con reducir movimiento mantiene Studio
+[57/61] qa/user-100-sim.spec.js:26:1 › controles principales tienen target táctil adecuado
+[58/61] qa/user-100-sim.spec.js:27:1 › Studio no genera pageerror al alternar ajustes
+[59/61] qa/user-100-sim.spec.js:28:1 › Studio cabe en iPhone 320
+[60/61] qa/user-100-sim.spec.js:29:1 › Forma cabe en iPhone 320
+[61/61] qa/user-100-sim.spec.js:30:1 › usuario puede enfocar la interfaz con teclado
+  61 passed (14.4s)
