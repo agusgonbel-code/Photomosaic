@@ -1,15 +1,15 @@
 PHOTOMOSAIC FAST RELEASE GATE
-SOURCE_COMMIT: d223cbd2be700dca97729c069e02efbce759c513
+SOURCE_COMMIT: 8a670c3219b7604763357374290db3540c16eecc
 RESULT: PASS
 EXIT_CODE: 0
-UTC: 2026-08-23T06:11:12Z
+UTC: 2026-08-23T15:45:24Z
 COVERAGE: browser + split flows + 320/375/390/430 mobile + wall project + accessibility
 --- TEST OUTPUT (tail) ---
 
 Running 32 tests using 2 workers
 
-[1/32] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 320px
-[2/32] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 320px
+[1/32] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 320px
+[2/32] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 320px
 [3/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 320px
 [4/32] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 320px
 [5/32] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 390px
@@ -40,4 +40,4 @@ Running 32 tests using 2 workers
 [30/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic rectangle studio fits iPad landscape
 [31/32] qa/mobile-layout.spec.js:10:43 › PhotoMosaic shape studio fits iPad landscape
 [32/32] qa/mobile-layout.spec.js:12:1 › PhotoMosaic stylesheet enforces safe-area and overflow protection
-  32 passed (8.4s)
+  32 passed (9.5s)
