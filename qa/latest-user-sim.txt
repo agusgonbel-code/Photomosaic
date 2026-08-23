@@ -1,0 +1,39 @@
+PHOTOMOSAIC USER SIMULATION
+SOURCE_COMMIT: 1dedf942b64256ff8fa83bb496bedb342983d667
+RESULT: PASS
+EXIT_CODE: 0
+SCENARIOS: 28
+UTC: 2026-08-23T18:58:37Z
+
+Running 29 tests using 1 worker
+
+[1/29] qa/user-100-sim.spec.js:6:1 › usuario entiende que existen dos productos
+[2/29] qa/user-100-sim.spec.js:7:1 › usuario entra en Mosaico desde inicio
+[3/29] qa/user-100-sim.spec.js:8:1 › usuario entra en Forma desde inicio
+[4/29] qa/user-100-sim.spec.js:9:38 › inicio cabe a 320px
+[5/29] qa/user-100-sim.spec.js:9:38 › inicio cabe a 375px
+[6/29] qa/user-100-sim.spec.js:9:38 › inicio cabe a 390px
+[7/29] qa/user-100-sim.spec.js:9:38 › inicio cabe a 430px
+[8/29] qa/user-100-sim.spec.js:10:41 › rectangle muestra flujo de fotos y ajustes
+[9/29] qa/user-100-sim.spec.js:10:41 › shape muestra flujo de fotos y ajustes
+[10/29] qa/user-100-sim.spec.js:11:1 › Mosaico muestra foto principal
+[11/29] qa/user-100-sim.spec.js:12:1 › Forma oculta foto principal
+[12/29] qa/user-100-sim.spec.js:13:1 › Forma muestra controles de silueta
+[13/29] qa/user-100-sim.spec.js:14:1 › Mosaico muestra controles de columnas
+[14/29] qa/user-100-sim.spec.js:15:1 › usuario cambia resolución
+[15/29] qa/user-100-sim.spec.js:16:1 › usuario cambia formato a PNG
+[16/29] qa/user-100-sim.spec.js:17:1 › usuario cambia variedad del mosaico
+[17/29] qa/user-100-sim.spec.js:18:1 › usuario configura medidas físicas de forma
+[18/29] qa/user-100-sim.spec.js:19:1 › usuario elige corazón
+[19/29] qa/user-100-sim.spec.js:20:1 › usuario elige forma personalizada
+[20/29] qa/user-100-sim.spec.js:21:1 › botón crear permanece bloqueado sin fotos
+[21/29] qa/user-100-sim.spec.js:22:1 › contador de fotos anuncia estado
+[22/29] qa/user-100-sim.spec.js:23:1 › resultado canvas tiene nombre accesible
+[23/29] qa/user-100-sim.spec.js:24:1 › usuario vuelve a elegir modo
+[24/29] qa/user-100-sim.spec.js:25:1 › usuario con reducir movimiento mantiene Studio
+[25/29] qa/user-100-sim.spec.js:26:1 › controles principales tienen target táctil adecuado
+[26/29] qa/user-100-sim.spec.js:27:1 › Studio no genera pageerror al alternar ajustes
+[27/29] qa/user-100-sim.spec.js:28:1 › Studio cabe en iPhone 320
+[28/29] qa/user-100-sim.spec.js:29:1 › Forma cabe en iPhone 320
+[29/29] qa/user-100-sim.spec.js:30:1 › usuario puede enfocar la interfaz con teclado
+  29 passed (9.3s)
