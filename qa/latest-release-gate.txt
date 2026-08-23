@@ -1,8 +1,8 @@
 PHOTOMOSAIC FAST RELEASE GATE
-SOURCE_COMMIT: d7a4cedddf584878457d49eb98334820408d06cc
-RESULT: FAIL
-EXIT_CODE: 1
-UTC: 2026-08-22T23:43:37Z
+SOURCE_COMMIT: fd5219429b2feefabbd49d7d8eb0c7c1f073b44c
+RESULT: PASS
+EXIT_CODE: 0
+UTC: 2026-08-23T00:06:45Z
 COVERAGE: browser + split flows + 320/375/390/430 mobile + wall project + accessibility
 --- TEST OUTPUT (tail) ---
 
@@ -11,167 +11,24 @@ Running 23 tests using 2 workers
 [1/23] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 320px
 [2/23] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 320px
 [3/23] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 320px
-  1) qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 320px ───────────────────
-
-    Error: rectangle-320: unnamed controls
-
-    expect(received).toEqual(expected) // deep equality
-
-    - Expected  - 1
-    + Received  + 7
-
-    - Array []
-    + Array [
-    +   "<input id=\"cols\" type=\"range\" min=\"15\" max=\"100\" value=\"45\">",
-    +   "<input id=\"blend\" type=\"range\" min=\"0\" max=\"60\" value=\"18\">",
-    +   "<select id=\"diversity\"><option value=\"0\">Color más fiel</option><option value=\"18\" selected=\"\">Equilibrada</option><option value=\"36\">Usar más fotos</option></select>",
-    +   "<select id=\"resolution\"><option value=\"1400\">Estándar · 1400 px</option><option value=\"2200\" selected=\"\">Alta · 2200 px</option><option value=\"3200\">Máxima · 3200 px</option></sele",
-    +   "<select id=\"exportFormat\"><option value=\"jpeg\" selected=\"\">JPEG · alta calidad y menor tamaño</option><option value=\"png\">PNG · sin pérdidas y archivo mayor</option></select>",
-    + ]
-
-      15 |     return !(el.getAttribute('aria-label')||explicit||parent||placeholder);
-      16 |   }).map(el=>el.outerHTML.slice(0,180)));
-    > 17 |   expect(unnamed,`${label}: unnamed controls`).toEqual([]);
-         |                                                ^
-      18 |   const tinyButtons=await page.locator('button:visible').evaluateAll(nodes=>nodes.filter(el=>{const r=el.getBoundingClientRect();return r.width<44||r.height<44}).map(el=>({text:el.textContent.trim().slice(0,40),w:el.getBoundingClientRect().width,h:el.getBoundingClientRect().height})));
-      19 |   expect(tinyButtons,`${label}: touch targets below 44px`).toEqual([]);
-      20 | }
-        at auditPage (/home/runner/work/Photomosaic/Photomosaic/qa/accessibility.spec.js:17:48)
-        at /home/runner/work/Photomosaic/Photomosaic/qa/accessibility.spec.js:28:90
-
-    Error Context: test-results/qa-accessibility-PhotoMosaic-accessibility-baseline-at-320px/error-context.md
-
-
 [4/23] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 320px
 [5/23] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 390px
 [6/23] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 375px
-  2) qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 375px ────────────────────────────────
-
-    Error: launcher {"scroll":404,"client":375}
-
-    expect(received).toBeLessThanOrEqual(expected)
-
-    Expected: <= 377
-    Received:    404
-
-      1 | const { test, expect } = require('@playwright/test');
-      2 | const BASE='http://127.0.0.1:4173';
-    > 3 | async function noOverflow(page,label=''){const d=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth}));expect(d.scroll,`${label} ${JSON.stringify(d)}`).toBeLessThanOrEqual(d.client+2)}
-        |                                                                                                                                                                                                                        ^
-      4 | for(const width of [320,375,390,430]){
-      5 |   test(`PhotoMosaic launcher fits ${width}px`,async({browser})=>{const context=await browser.newContext({viewport:{width,height:820},isMobile:true,hasTouch:true});const page=await context.newPage();await page.goto(`${BASE}/`,{waitUntil:'domcontentloaded'});await noOverflow(page,'launcher');const hero=await page.locator('.modeHero h1').evaluate(el=>({w:el.getBoundingClientRect().width,wordBreak:getComputedStyle(el).wordBreak,overflowWrap:getComputedStyle(el).overflowWrap}));expect(hero.w).toBeGreaterThan(Math.min(250,width-40));expect(hero.wordBreak).toBe('normal');expect(hero.overflowWrap).toBe('normal');await context.close()});
-      6 |   for(const mode of ['rectangle','shape'])test(`PhotoMosaic ${mode} studio fits ${width}px`,async({browser})=>{const context=await browser.newContext({viewport:{width,height:820},isMobile:true,hasTouch:true});const page=await context.newPage();await page.goto(`${BASE}/studio.html?mode=${mode}`,{waitUntil:'domcontentloaded'});await noOverflow(page,`${mode}-top`);const h1=page.locator('h1').first();if(await h1.count()){const text=await h1.evaluate(el=>({wordBreak:getComputedStyle(el).wordBreak,overflowWrap:getComputedStyle(el).overflowWrap,width:el.getBoundingClientRect().width}));expect(text.wordBreak).toBe('normal');expect(text.overflowWrap).toBe('normal');expect(text.width).toBeGreaterThan(170)}await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));await page.waitForTimeout(30);await noOverflow(page,`${mode}-bottom`);await context.close()});
-        at noOverflow (/home/runner/work/Photomosaic/Photomosaic/qa/mobile-layout.spec.js:3:216)
-        at /home/runner/work/Photomosaic/Photomosaic/qa/mobile-layout.spec.js:5:258
-
-    Error Context: test-results/qa-mobile-layout-PhotoMosaic-launcher-fits-375px/error-context.md
-
-
 [7/23] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 375px
-  3) qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 390px ───────────────────
-
-    Error: rectangle-390: unnamed controls
-
-    expect(received).toEqual(expected) // deep equality
-
-    - Expected  - 1
-    + Received  + 7
-
-    - Array []
-    + Array [
-    +   "<input id=\"cols\" type=\"range\" min=\"15\" max=\"100\" value=\"45\">",
-    +   "<input id=\"blend\" type=\"range\" min=\"0\" max=\"60\" value=\"18\">",
-    +   "<select id=\"diversity\"><option value=\"0\">Color más fiel</option><option value=\"18\" selected=\"\">Equilibrada</option><option value=\"36\">Usar más fotos</option></select>",
-    +   "<select id=\"resolution\"><option value=\"1400\">Estándar · 1400 px</option><option value=\"2200\" selected=\"\">Alta · 2200 px</option><option value=\"3200\">Máxima · 3200 px</option></sele",
-    +   "<select id=\"exportFormat\"><option value=\"jpeg\" selected=\"\">JPEG · alta calidad y menor tamaño</option><option value=\"png\">PNG · sin pérdidas y archivo mayor</option></select>",
-    + ]
-
-      15 |     return !(el.getAttribute('aria-label')||explicit||parent||placeholder);
-      16 |   }).map(el=>el.outerHTML.slice(0,180)));
-    > 17 |   expect(unnamed,`${label}: unnamed controls`).toEqual([]);
-         |                                                ^
-      18 |   const tinyButtons=await page.locator('button:visible').evaluateAll(nodes=>nodes.filter(el=>{const r=el.getBoundingClientRect();return r.width<44||r.height<44}).map(el=>({text:el.textContent.trim().slice(0,40),w:el.getBoundingClientRect().width,h:el.getBoundingClientRect().height})));
-      19 |   expect(tinyButtons,`${label}: touch targets below 44px`).toEqual([]);
-      20 | }
-        at auditPage (/home/runner/work/Photomosaic/Photomosaic/qa/accessibility.spec.js:17:48)
-        at /home/runner/work/Photomosaic/Photomosaic/qa/accessibility.spec.js:28:90
-
-    Error Context: test-results/qa-accessibility-PhotoMosaic-accessibility-baseline-at-390px/error-context.md
-
-
-[8/23] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 375px
-[9/23] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 430px
+[8/23] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 430px
+[9/23] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 375px
 [10/23] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 390px
-  4) qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 430px ───────────────────
-
-    Error: rectangle-430: unnamed controls
-
-    expect(received).toEqual(expected) // deep equality
-
-    - Expected  - 1
-    + Received  + 7
-
-    - Array []
-    + Array [
-    +   "<input id=\"cols\" type=\"range\" min=\"15\" max=\"100\" value=\"45\">",
-    +   "<input id=\"blend\" type=\"range\" min=\"0\" max=\"60\" value=\"18\">",
-    +   "<select id=\"diversity\"><option value=\"0\">Color más fiel</option><option value=\"18\" selected=\"\">Equilibrada</option><option value=\"36\">Usar más fotos</option></select>",
-    +   "<select id=\"resolution\"><option value=\"1400\">Estándar · 1400 px</option><option value=\"2200\" selected=\"\">Alta · 2200 px</option><option value=\"3200\">Máxima · 3200 px</option></sele",
-    +   "<select id=\"exportFormat\"><option value=\"jpeg\" selected=\"\">JPEG · alta calidad y menor tamaño</option><option value=\"png\">PNG · sin pérdidas y archivo mayor</option></select>",
-    + ]
-
-      15 |     return !(el.getAttribute('aria-label')||explicit||parent||placeholder);
-      16 |   }).map(el=>el.outerHTML.slice(0,180)));
-    > 17 |   expect(unnamed,`${label}: unnamed controls`).toEqual([]);
-         |                                                ^
-      18 |   const tinyButtons=await page.locator('button:visible').evaluateAll(nodes=>nodes.filter(el=>{const r=el.getBoundingClientRect();return r.width<44||r.height<44}).map(el=>({text:el.textContent.trim().slice(0,40),w:el.getBoundingClientRect().width,h:el.getBoundingClientRect().height})));
-      19 |   expect(tinyButtons,`${label}: touch targets below 44px`).toEqual([]);
-      20 | }
-        at auditPage (/home/runner/work/Photomosaic/Photomosaic/qa/accessibility.spec.js:17:48)
-        at /home/runner/work/Photomosaic/Photomosaic/qa/accessibility.spec.js:28:90
-
-    Error Context: test-results/qa-accessibility-PhotoMosaic-accessibility-baseline-at-430px/error-context.md
-
-
-[11/23] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 390px
-[12/23] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 390px
-[13/23] qa/accessibility.spec.js:34:1 › PhotoMosaic CSS exposes focus indication and reduced motion
-[14/23] qa/split-flows.spec.js:3:1 › launcher exposes two independent creation modes
-[15/23] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 430px
-[16/23] qa/split-flows.spec.js:5:1 › classic mosaic shows only the classic workflow
-  5) qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 430px ────────────────────────────────
-
-    Error: launcher {"scroll":458,"client":430}
-
-    expect(received).toBeLessThanOrEqual(expected)
-
-    Expected: <= 432
-    Received:    458
-
-      1 | const { test, expect } = require('@playwright/test');
-      2 | const BASE='http://127.0.0.1:4173';
-    > 3 | async function noOverflow(page,label=''){const d=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth}));expect(d.scroll,`${label} ${JSON.stringify(d)}`).toBeLessThanOrEqual(d.client+2)}
-        |                                                                                                                                                                                                                        ^
-      4 | for(const width of [320,375,390,430]){
-      5 |   test(`PhotoMosaic launcher fits ${width}px`,async({browser})=>{const context=await browser.newContext({viewport:{width,height:820},isMobile:true,hasTouch:true});const page=await context.newPage();await page.goto(`${BASE}/`,{waitUntil:'domcontentloaded'});await noOverflow(page,'launcher');const hero=await page.locator('.modeHero h1').evaluate(el=>({w:el.getBoundingClientRect().width,wordBreak:getComputedStyle(el).wordBreak,overflowWrap:getComputedStyle(el).overflowWrap}));expect(hero.w).toBeGreaterThan(Math.min(250,width-40));expect(hero.wordBreak).toBe('normal');expect(hero.overflowWrap).toBe('normal');await context.close()});
-      6 |   for(const mode of ['rectangle','shape'])test(`PhotoMosaic ${mode} studio fits ${width}px`,async({browser})=>{const context=await browser.newContext({viewport:{width,height:820},isMobile:true,hasTouch:true});const page=await context.newPage();await page.goto(`${BASE}/studio.html?mode=${mode}`,{waitUntil:'domcontentloaded'});await noOverflow(page,`${mode}-top`);const h1=page.locator('h1').first();if(await h1.count()){const text=await h1.evaluate(el=>({wordBreak:getComputedStyle(el).wordBreak,overflowWrap:getComputedStyle(el).overflowWrap,width:el.getBoundingClientRect().width}));expect(text.wordBreak).toBe('normal');expect(text.overflowWrap).toBe('normal');expect(text.width).toBeGreaterThan(170)}await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));await page.waitForTimeout(30);await noOverflow(page,`${mode}-bottom`);await context.close()});
-        at noOverflow (/home/runner/work/Photomosaic/Photomosaic/qa/mobile-layout.spec.js:3:216)
-        at /home/runner/work/Photomosaic/Photomosaic/qa/mobile-layout.spec.js:5:258
-
-    Error Context: test-results/qa-mobile-layout-PhotoMosaic-launcher-fits-430px/error-context.md
-
-
-[17/23] qa/split-flows.spec.js:7:1 › wall shape hides mosaic-only controls and activates physical planning
-[18/23] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 430px
-[19/23] qa/split-flows.spec.js:9:1 › generated result freezes source controls until creating another design
+[11/23] qa/accessibility.spec.js:34:1 › PhotoMosaic CSS exposes focus indication and reduced motion
+[12/23] qa/split-flows.spec.js:3:1 › launcher exposes two independent creation modes
+[13/23] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 390px
+[14/23] qa/split-flows.spec.js:5:1 › classic mosaic shows only the classic workflow
+[15/23] qa/split-flows.spec.js:7:1 › wall shape hides mosaic-only controls and activates physical planning
+[16/23] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 390px
+[17/23] qa/split-flows.spec.js:9:1 › generated result freezes source controls until creating another design
+[18/23] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 430px
+[19/23] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 430px
 [20/23] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 430px
 [21/23] qa/wall-project-v30.spec.js:3:1 › wall project runtime is active in shape studio
 [22/23] qa/mobile-layout.spec.js:8:1 › PhotoMosaic stylesheet enforces safe-area and overflow protection
 [23/23] qa/wall-project-v30.spec.js:4:1 › wall project rejects invalid coordinates instead of exporting NaN geometry
-  5 failed
-    qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 320px ────────────────────
-    qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 390px ────────────────────
-    qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 430px ────────────────────
-    qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 375px ─────────────────────────────────
-    qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 430px ─────────────────────────────────
-  18 passed (8.4s)
+  23 passed (8.6s)
