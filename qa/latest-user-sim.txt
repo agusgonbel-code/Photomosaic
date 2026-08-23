@@ -1,9 +1,9 @@
 PHOTOMOSAIC USER SIMULATION
-SOURCE_COMMIT: 0b134770beb9a7398ad1cc6bcea3ac515bc5908c
+SOURCE_COMMIT: bb10c6fc3b01cf9c893c2e310001cd9d545aaa1f
 RESULT: PASS
 EXIT_CODE: 0
 SCENARIOS: 28
-UTC: 2026-08-23T21:08:47Z
+UTC: 2026-08-23T22:11:07Z
 
 Running 29 tests using 1 worker
 
@@ -36,4 +36,4 @@ Running 29 tests using 1 worker
 [27/29] qa/user-100-sim.spec.js:28:1 › Studio cabe en iPhone 320
 [28/29] qa/user-100-sim.spec.js:29:1 › Forma cabe en iPhone 320
 [29/29] qa/user-100-sim.spec.js:30:1 › usuario puede enfocar la interfaz con teclado
-  29 passed (9.7s)
+  29 passed (8.5s)
