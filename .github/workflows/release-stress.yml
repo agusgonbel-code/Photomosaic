@@ -90,7 +90,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p qa
           count=$(find /tmp/photomosaic-evidence -name 'shard-*.txt' -type f | wc -l | tr -d ' ')
           success=$(grep -l '^RESULT: success$' /tmp/photomosaic-evidence/shard-*.txt 2>/dev/null | wc -l | tr -d ' ')
           result=FAIL
@@ -104,18 +103,21 @@ jobs:
             echo "UTC: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
             echo '--- SHARDS ---'
             cat /tmp/photomosaic-evidence/shard-*.txt || true
-          } > qa/release-stress-latest.txt
-      - name: Persist evidence
+          } > /tmp/photomosaic-release-stress-latest.txt
+      - name: Persist evidence safely on latest main
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'PhotoMosaic QA Bot'
           git config user.email 'actions@users.noreply.github.com'
+          git fetch origin main
+          git reset --hard origin/main
+          mkdir -p qa
+          cp /tmp/photomosaic-release-stress-latest.txt qa/release-stress-latest.txt
           git add qa/release-stress-latest.txt
           if git diff --cached --quiet; then exit 0; fi
           git commit -m 'QA result: PhotoMosaic 1000x release stress [skip ci]'
-          git pull --rebase origin main
           git push origin HEAD:main
       - name: Enforce release stress gate
         shell: bash
-        run: grep -q '^RESULT: PASS$' qa/release-stress-latest.txt
+        run: grep -q '^RESULT: PASS$' /tmp/photomosaic-release-stress-latest.txt
