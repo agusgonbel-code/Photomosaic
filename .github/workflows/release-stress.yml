@@ -3,6 +3,8 @@ name: PhotoMosaic Release Stress 1000x
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -10,7 +12,7 @@ permissions:
 
 concurrency:
   group: photomosaic-release-stress-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   stress:
@@ -79,7 +81,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event_name == 'push' && 'main' || github.sha }}
       - name: Download stress evidence
         uses: actions/download-artifact@v4
         with:
@@ -105,6 +107,7 @@ jobs:
             cat /tmp/photomosaic-evidence/shard-*.txt || true
           } > /tmp/photomosaic-release-stress-latest.txt
       - name: Persist evidence safely on latest main
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         shell: bash
         run: |
           set -euo pipefail
