@@ -1,15 +1,15 @@
 PHOTOMOSAIC FAST RELEASE GATE
-SOURCE_COMMIT: c795940b92d5e401c463f46fac34834d260fdb54
+SOURCE_COMMIT: 3715e5fde4d037bff29adbee3d4ed6bbf5d4bf5c
 RESULT: PASS
 EXIT_CODE: 0
-UTC: 2026-08-26T10:08:55Z
+UTC: 2026-08-27T21:11:36Z
 COVERAGE: browser + split flows + 320/375/390/430 mobile + wall project + accessibility + 28 user-behavior scenarios
 --- TEST OUTPUT (tail) ---
 
 Running 65 tests using 2 workers
 
-[1/65] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 320px
-[2/65] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 320px
+[1/65] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 320px
+[2/65] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 320px
 [3/65] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 320px
 [4/65] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 320px
 [5/65] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 390px
@@ -17,29 +17,29 @@ Running 65 tests using 2 workers
 [7/65] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 375px
 [8/65] qa/accessibility.spec.js:23:3 › PhotoMosaic accessibility baseline at 430px
 [9/65] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 375px
-[10/65] qa/accessibility.spec.js:34:1 › PhotoMosaic CSS exposes focus indication and reduced motion
-[11/65] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 390px
+[10/65] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 390px
+[11/65] qa/accessibility.spec.js:34:1 › PhotoMosaic CSS exposes focus indication and reduced motion
 [12/65] qa/split-flows.spec.js:3:1 › launcher exposes two independent creation modes
 [13/65] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 390px
 [14/65] qa/split-flows.spec.js:5:1 › classic mosaic shows only the classic workflow
-[15/65] qa/split-flows.spec.js:7:1 › wall shape hides mosaic-only controls and activates physical planning
-[16/65] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 390px
+[15/65] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 390px
+[16/65] qa/split-flows.spec.js:7:1 › wall shape hides mosaic-only controls and activates physical planning
 [17/65] qa/split-flows.spec.js:9:1 › generated result freezes source controls until creating another design
 [18/65] qa/mobile-layout.spec.js:5:3 › PhotoMosaic launcher fits 430px
 [19/65] qa/mobile-layout.spec.js:6:43 › PhotoMosaic rectangle studio fits 430px
 [20/65] qa/mobile-layout.spec.js:6:43 › PhotoMosaic shape studio fits 430px
 [21/65] qa/user-100-sim.spec.js:6:1 › usuario entiende que existen dos productos
-[22/65] qa/user-100-sim.spec.js:7:1 › usuario entra en Mosaico desde inicio
-[23/65] qa/mobile-layout.spec.js:9:3 › PhotoMosaic launcher fits iPhone landscape
+[22/65] qa/mobile-layout.spec.js:9:3 › PhotoMosaic launcher fits iPhone landscape
+[23/65] qa/user-100-sim.spec.js:7:1 › usuario entra en Mosaico desde inicio
 [24/65] qa/mobile-layout.spec.js:10:43 › PhotoMosaic rectangle studio fits iPhone landscape
 [25/65] qa/user-100-sim.spec.js:8:1 › usuario entra en Forma desde inicio
 [26/65] qa/mobile-layout.spec.js:10:43 › PhotoMosaic shape studio fits iPhone landscape
-[27/65] qa/user-100-sim.spec.js:9:38 › inicio cabe a 320px
-[28/65] qa/mobile-layout.spec.js:9:3 › PhotoMosaic launcher fits iPad portrait
-[29/65] qa/user-100-sim.spec.js:9:38 › inicio cabe a 375px
-[30/65] qa/mobile-layout.spec.js:10:43 › PhotoMosaic rectangle studio fits iPad portrait
-[31/65] qa/user-100-sim.spec.js:9:38 › inicio cabe a 390px
-[32/65] qa/mobile-layout.spec.js:10:43 › PhotoMosaic shape studio fits iPad portrait
+[27/65] qa/mobile-layout.spec.js:9:3 › PhotoMosaic launcher fits iPad portrait
+[28/65] qa/user-100-sim.spec.js:9:38 › inicio cabe a 320px
+[29/65] qa/mobile-layout.spec.js:10:43 › PhotoMosaic rectangle studio fits iPad portrait
+[30/65] qa/user-100-sim.spec.js:9:38 › inicio cabe a 375px
+[31/65] qa/mobile-layout.spec.js:10:43 › PhotoMosaic shape studio fits iPad portrait
+[32/65] qa/user-100-sim.spec.js:9:38 › inicio cabe a 390px
 [33/65] qa/user-100-sim.spec.js:9:38 › inicio cabe a 430px
 [34/65] qa/user-100-sim.spec.js:10:41 › rectangle muestra flujo de fotos y ajustes
 [35/65] qa/user-100-sim.spec.js:10:41 › shape muestra flujo de fotos y ajustes
@@ -54,8 +54,8 @@ Running 65 tests using 2 workers
 [44/65] qa/wall-project-v30.spec.js:4:1 › wall project rejects invalid coordinates instead of exporting NaN geometry
 [45/65] qa/user-100-sim.spec.js:14:1 › Mosaico muestra controles de columnas
 [46/65] qa/user-100-sim.spec.js:15:1 › usuario cambia resolución
-[47/65] qa/wall-project-v30.spec.js:5:1 › centered wall project reports installation coordinates from wall edges
-[48/65] qa/user-100-sim.spec.js:16:1 › usuario cambia formato a PNG
+[47/65] qa/user-100-sim.spec.js:16:1 › usuario cambia formato a PNG
+[48/65] qa/wall-project-v30.spec.js:5:1 › centered wall project reports installation coordinates from wall edges
 [49/65] qa/user-100-sim.spec.js:17:1 › usuario cambia variedad del mosaico
 [50/65] qa/user-100-sim.spec.js:18:1 › usuario configura medidas físicas de forma
 [51/65] qa/wall-project-v30.spec.js:6:1 › partial wall dimensions remain explicit instead of silently dropping the wall constraint
@@ -73,4 +73,4 @@ Running 65 tests using 2 workers
 [63/65] qa/user-100-sim.spec.js:28:1 › Studio cabe en iPhone 320
 [64/65] qa/user-100-sim.spec.js:29:1 › Forma cabe en iPhone 320
 [65/65] qa/user-100-sim.spec.js:30:1 › usuario puede enfocar la interfaz con teclado
-  65 passed (15.3s)
+  65 passed (15.5s)
